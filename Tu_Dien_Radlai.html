@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Raglai Translate v21.0</title>
+    <style>
+        :root { --primary: #1a73e8; --bg: #f1f3f4; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
+        .container { background: white; width: 100%; max-width: 500px; margin: auto; padding: 15px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); box-sizing: border-box; }
+        h2 { color: var(--primary); text-align: center; margin-top: 0; font-size: 20px; }
+        .status-container { margin-bottom: 10px; }
+        .progress-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
+        #progress { width: 0%; height: 100%; background: #34a853; transition: width 0.1s; }
+        .status-text { text-align: center; color: #5f6368; font-size: 11px; margin-top: 5px; font-weight: bold; }
+        textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid #dadce0; border-radius: 8px; font-size: 16px; box-sizing: border-box; outline: none; resize: none; }
+        .btn-dich { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .btn-dich:disabled { background: #ccc; cursor: not-allowed; }
+        .result-box { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid var(--primary); min-height: 50px; }
+        #output { font-size: 18px; line-height: 1.6; color: #202124; word-wrap: break-word; }
+        .highlight { color: #1a73e8; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Raglai Translate v21.0</h2>
+    <div class="status-container">
+        <div class="progress-bar"><div id="progress"></div></div>
+        <div id="loadStatus" class="status-text">Đang khởi khởi động hệ thống...</div>
+    </div>
+    
+    <textarea id="input" placeholder="Nhập tiếng Việt hoặc tiếng Raglai..."></textarea>
+    <button class="btn-dich" id="btnDich" disabled onclick="xuLyDich()">ĐANG NẠP DỮ LIỆU...</button>
+    <div class="result-box"><div id="output">Kết quả sẽ hiển thị tại đây...</div></div>
+</div>
+
+<script id="raw_data" type="text/plain">
+
+achid achid|phức tạp
+acut|muỗng
+ada|vịt
+ada|con vịt
+adant|luật tục / phong tục
+adant sam bơk|thói quen nấu ăn
+adei|em
+adiar|con ve
+adiar|ve sầu
+adud sraot|lớp học
+adut|gian / phòng / lớp
+aga|ngoài
+ahod pơr|máy bay
+akot|đầu
+akot pu chomt palei|chính quyền
+akơt|đầu
+akuh ka|quai hàm
+amaq|bố / cha
+amil|me
+amra|cây rựa
+amra|cái rựa
+amrad|con công
+amret|ớt
+amret|quả ớt
+amu|buồng
+amu tangan|cổ tay
+anaqd|con
+anaqd lingiaq|màng nhĩ
+anaqd mata|con ngươi / mống mắt
+anaqd mata|con ngươi
+anaqt|phía trước
+anaqt niq|sang năm
+angan|tên
+angin|gió
+anint|thương / yêu
+anint majua|nhớ thương
+anint salet|thương mến
+anint sri|thương mến / trìu mến
+aniqd|cây ní / sậy chọc lỗ
+ano|gánh
+anqd - ta - amad|con đom đóm
+anu|dúi / chuột tre
+ao|áo
+ao churpha|áo quần
+apok pitiad|dòng họ / gia tộc
+apok pitiad gah awei|gia tộc theo họ mẹ
+apuh|rẫy
+apui|lửa
+ara|ngỗng
+ariak|con cua
+arod|cái đuốc
+aseh|con ngựa
+asơq|thú vật / loài vật
+asơq dlai|thú rừng
+asơt|thú rừng
+asơu|con chó
+asơu sik|chó sói
+sik|sói
+ata|quả trứng
+atah|xa
+atau|ma
+atok tisơu|núm vú
+atot luait|cổ họng
+atuei|khách
+atuqd|khớp
+atuqd tangan|khớp ngón tay
+atuqd tula rok|đốt sống
+atwa|ốc rừng
+avaih|quét / tay trái
+avih|hết / toàn bộ
+avih tih|tất cả / toàn thể
+awad tangan|cẳng tay
+awei|mẹ
+awei prok|bác gái
+ayud|thổi
+ayuh ranam|cảm ơn
+bak|lần / lượt
+beit|bẫy / cái bẫy
+ben|nhỏ / bé
+bet zale / zale|cái cuốc
+bhu|sạch sẽ
+bhu / god|sạch
+bla|bãi / quảng trường
+bla cuah|bãi cát
+blad mata|mở mắt
+blo|bỗng / chợt
+bluqd|hiền / lành
+bo|quả bơ
+bod mata|mặt / mặt mũi
+bơk|ăn
+bra|thưa / lưa thưa
+brak|trong / trong trẻo
+breqh hatai|cảm động
+breqh hatai / sining sapad:|cảm động
+brơut|mũi tên
+buah|đọc
+bud|tóc
+bud bu|tóc
+bueit|dễ / đơn giản / rẻ
+buh|thấy
+buh va haget ga vuơl oh|không đem lại cho dân
+buh... oh|không có
+ca|chờ / đợi
+cadamt|bền vững
+cađah sana tangei|nồi rang bắp
+cađamt|bền vững
+cađeh kroh|tấm gương
+cađeh kroh sadah|tấm gương sáng
+cađeh krơh|tấm gương
+cađeh krơh sađah|tấm gương sáng
+cađeh va-ar|tấm giấy
+cađiak takai|ngón chân
+cađiak tangan inaq|ngón tay cái
+caga|can / can ngăn
+cagad|gang tay
+cagak|chà gạc
+cakhat|ngăn / chặn
+caku|khiêng
+cakuai|con cheo / con mang / con hoẵng / con đỏ
+camhir / surat siad lagheh|văn minh
+caneqh|nong
+cangua|nia
+canuaqt karei|đặc biệt quan trọng
+canuaqt vruaqt|chuyên môn hóa
+caranaq|xử / phản xử / hòa giải
+catang|dữ dội
+cawad|chén
+cawad / awad|cái chén
+ceh|đẻ / sinh ra
+ch-har|mã la / chiêng bằng
+ch-hot|múc
+cha|thác
+cha ea|thác nước
+cheng|xanh
+cheng lageh|xanh tốt
+chid|khâu / may
+chong|xong
+chong vloh|xong rồi
+chơh|thích
+chuah|sai
+cih|viết
+cih|vẽ
+cimk|chim
+cimt|chim
+cimt|dương vật (nói tránh)
+cimt paravut|chim bìm bịp
+cimt vala|chim bala
+cơt|núi
+cơt blo di tasid|hòn đảo
+crad|chiếu / soi rọi
+creh|xé
+crek crek|róc rách
+crod|trút vào
+crod|bỏ vào
+crod usar|xuống giống
+croh|suối
+cuah|cát
+cuah gahul|cát bụi
+cubơu|ngửi
+cubơu eat|khứu giác
+cubuai|môi
+cud|mặc
+cuh|đốt
+cum|hôn
+cupa|con ba ba
+cupa|ba ba
+cur|vôi
+curupha/ curpha|quần
+dak|sợi
+dalaot|trong / bên trong/  trên
+dalud|buồn nôn
+danao|hồ / ao
+danhar|trơn
+danơl|nguồn
+danơl hunan|tiềm năng
+danrud|chuột chù
+danrud|chù
+danruq|chuột chù
+danuk|giàn / bộ
+daot|thẩm
+dar|quanh / xung quanh /  quạt
+dar thut|quanh năm
+dara|trẻ
+darah|máu
+darah đuait điơu gơd|khí huyết lưu thông
+dat / lơt|xếp
+deh / patuh|nổ
+deng|thuôn / thuôn dài
+dhad|cành /  rộng
+dhai|rãnh
+dhio dhio|thong thả
+dho|chân dốc / dưới dốc
+dho dho|lẽo đẽo
+dhơd|lang thang
+dhur|con dơi
+dhur|dơi
+di|chỗ
+di anaqt|đằng trước / phía trước / trước mặt
+di ga rok|đằng sau / phía sau / sau lưng
+di gah tapur|bên cạnh mâm bếp
+di khraqh|ở giữa
+di phia|bên cạnh
+di rud|bổn phận
+did tagud|tăng trưởng
+dih|đó
+dih / padih|kia / đàng kia
+dilah|lưỡi
+dlai|rừng
+dlai / kaih|rừng
+dlai riya|rừng rậm
+dleh|mệt
+dlo|cao
+dlo|não
+dod|ở / còn / sinh
+dod di naqt|đối diện
+dod gađơk|yên lặng / im
+dok|giúp
+dơk|đứng
+dol|thắng
+dơn|điếc
+dout|đắp
+dơt|trốn
+dơut|đắp
+drah|nhanh /  mau
+vahrơu|mới
+drah di gơt|nhanh hơn
+draqd|mát
+drei|mình / ta / chúng mình / chúng ta
+drian|ong vò vẽ
+drơq|nhận lỗi
+dru|chảy
+du|những / các
+du thut hlơu|những năm trước
+du voh lađaot jaqh|phong tục / tập quán lạc hậu
+dua|hai / 2
+duah|tìm / kiếm
+duk|gùi nhỏ
+dum|bụi
+duơh|đũa
+dwi|kéo / kéo đi
+đah|nở (hoa)
+đah|nở /hoa/
+đaot|thẩm
+đeh/patuh|nổ
+đid tagud|tăng trưởng /  tăng
+đih|nằm
+đod|nói
+đơm / sraot|học
+đu|nổi
+ea|nước
+ea aga|quốc tế
+ea hian|nước nhầy mũi
+ea kakuar|sương
+ea lơut|nước lũ
+ea ma-iaqt|nước tiểu
+ea mata|nước mắt
+ea mvah|nước bọt
+ea sret|tinh dịch
+ea sret puk phid|dịch mật
+ea vilad|trăng
+ea vilad angar|trăng rằm
+eat|nhìn / trông
+eat / khran|nhìn
+eat / tuba / khran|nhìn
+eh lingiaq|dái tai
+eqd|lắm / rất
+eqd|thấp
+ga|cho / để cho
+ga ala|ở dưới /  dưới
+ga dlo|ở trên / trên
+ga- nhaqt mada|giàu
+gadlo / dlo|cao
+gađơk maya|bình yên / bình yên đẹp đẽ
+gađơk siad|bình yên vui vẻ
+gah|bên / bờ / phía / cạnh
+gai ano|đòn gánh
+gai wah|cây viết / bút
+galo|hướng / phía
+galo iduk|lỗ mũi
+galo tod|hậu môn
+galoh|quát / la
+gamsi / si|và / với / cùng với
+ganhong cao|tức giận
+ganiaqt|hẹp
+garah|bờ / ven
+garah|phía 
+garah bắc|phía bắc
+garah cơt|miền núi
+gha|nực
+ghơut|dọa dẫm
+ghu|cháy
+gi|bếp
+gila|dại dột
+god jaqh|ảnh hưởng xấu
+got|nồi
+gơt|bạn
+gơt / si gơt|nhau / với nhau
+gơt ben|bạn nhỏ
+got jaot|nồi canh
+got suvat|nồi đồng
+got vu|nồi cơm
+gơt gan|bạn bè
+graqt tula|bộ xương
+graqt tula risuqk|khung xương sườn
+grơm|sấm
+guai|giáp ranh /  độc lập
+guait|vớt / vớt lên
+guar agal|lá buông
+gubiarh|nho
+gud|hang / gộp (đá)
+gui|cõng / gùi
+hadu|bao nhiêu / mấy
+haget|gì / cái gì
+hala|trầu
+halei|nào
+halimt|lụt / lũ
+halơi|nào
+halơu|chày
+haluh|bi thương
+halui / layơt|bóng râm
+hangoq|thông / cây thông
+hanuaqt|phải
+hapa|ở đâu 
+hapuei|khoai / sắn
+hapuei kayơu|khoai mì
+hapuei lo|khoai lang
+harơh|ác / hung ác / hung dữ
+hatai|gan
+hatai yeh papah|niềm tự hào
+hatua|hạn / hạn hán
+havi|bao giờ 
+havit|nữa
+havơu|tro
+havơu gi|tro bếp
+havud|nữa
+hawa|vượn
+hawal huet|lo sợ
+hayơ|vì sao 
+hel|thè lưỡi
+hia|khóc
+hiaq|đó / đây / kia
+hlot|cám
+hlơt|cám
+hlơu|trước
+hlơu avih|tiêu biểu / đầu tiên nhất
+hlơu dih|trước kia
+hluơt|bén
+hmơqt|nghe
+hmơqt đơd|nghe nói
+hơl pơl|ngạc nhiên
+hơq|vâng
+hudit|sống
+dod hudit| sinh sống
+huet|sợ
+huh|mồ hơi
+huit|nếm
+huit eat|vị giác
+hulid sod|phổi
+hulơu|nguồn (nước)
+humaq|ruộng
+hunaqd|đờm
+huniq|ong mật
+hurei|ngày
+hurei dih|ngày hôm kia
+hurei dua|thứ 2
+hurei lumaq|thứ 5
+hurei nam|thứ 6
+hurei niq|ngày hôm nay
+hurei nơn|hôm ấy
+hurei pad|thứ 4
+hurei patot|ngày đầu tiên
+hurei sa|chủ nhật
+hurei sadih|ngày hôm kia kìa
+hurei tizuh|thứ 7
+hurei tlơu|thứ 3
+huzad|mua
+huzad|mưa
+iau|trái
+iduk|mũi
+ikad|con cá
+ikad thu aot|nướng cá khô
+ikad vơ - vơ|cá tràu
+ikaq|cá
+ikaq vơ|cá tràu
+ikat|buộc
+ikhad|tuyên truyền / kể lại / báo lại
+ikhad tiang|phát huy
+iku|đuôi
+ing|con ễnh ương
+iơu|gọi / kêu
+iơu angan|gọi tên
+jad|cầm / cầm lấy
+jaerơu|thô / thô ráp
+jah (tuvơu)|bã (mía)
+janeq|khốn
+jaot|rau
+jaot sana|rau xào
+jaot suvai|rau nấu canh
+jaqh|dở / lạc hậu/ xấu
+jaqh jret|xấu xa
+jho jho|lẽo đẽo
+jơt|đúng / đúng là / là
+jơt gơt|giống nhau
+jơt oh|không đúng / không phải
+jra|con cáo
+jra|cáo
+jra / maza|chồn
+jrao|cây lồ ô
+jrao / la-a / kata|lồ ô / nứa
+jrơk|vớt ra
+jrơm|nhúng 
+jrơqd|bẩn
+jruah|đỏ / mãng
+jruat|nai
+jruqk|dấu
+jud|uống / hút
+juh|củi
+ka|hàm
+ka|cằm
+ka-iang|eo
+kacua|cả
+kadad|ẩn nấp, trốn
+kadi pađiat ea|ấm nấu nước
+kadla|chuyện / điều / việc
+kadơh|bầu
+voh kadơh|quả bầu
+kaduơl|gót
+kađa di hatai|ngần ngại
+kađad|ẩn nấp / trốn
+kađek|bẩn(ngữ cảnh ăn uống)
+kađo|con nhím
+kađo|nhím
+kađơd dih|xưa kia / ngày xưa
+kah|bớt (chia sẻ)
+kaih|rừng
+kalapuk ma-iaqt|bọng đái
+kalei|đào
+kalid|giặc / kháng chiến / chiến tranh
+kalot mata|hốc mắt
+kamuan|cháu
+kan|khó / đắt
+kanal|nắm bắt / nhớ / thuộc
+kanaq|đang
+kanaq kohamum|đang hạnh phúc
+kaplung soh|mù mịt
+kapuih|con beo
+kapuih|beo
+karat|cái đe
+karei|đào
+karei di gơt|khác nhau
+karei vlud|đặc biệt
+karơt|đóng
+kasơnt|nghèo
+kasơr|cũ
+kat pavlei|buôn bán
+katat|mủ
+katat kayou|nhựa cây
+katet / pet|hái
+katơk|bụi / đám (cỏ...)
+katơt patơu|bẫy đá
+katuk|kéo (dây...)
+kaya|đồ / thứ / vật
+kaya kat pavlei|hàng hóa
+kaya manham plah|nghề tiểu thủ công nghiệp
+kaya ngan|đồ vật / vật dùng
+kaya pioh|di sản / tài sản
+kayơu|cây
+kayơu vinuqd|cây đa
+kayua|nhờ / nhờ có
+kazaot karu|khỏe
+ke / ben|nhỏ
+ke ben kreh|trẻ suy dưỡng
+ke no|cậu bé
+keh|sơn dương
+kei|ông
+khak|cứng
+khak hatai|kiên quyết / quyết tâm
+khak hatai|quyết tâm
+khiang|muốn
+khiaqt|canh / gác
+khin|dám
+khinh|khinh
+khiơt|khinh
+khot|cái mõ
+khơt|chỉ / chỉ có
+khradh hurei|giữa trưa
+khram|tre
+khraqd|giữa
+khrung|dấu / vết
+khung|cũng
+khung jơt tut|cũng là lúc
+kiơl|con ếch
+kod|trắng
+kơr viđu|cuốn trôi
+kơu|tôi / tao
+kra|con khỉ
+kriq krad|ầm ĩ
+kro|sông
+kroh đuait|vùng chạy
+kroh pagalah|vụt / vụt nhanh
+kruait|cam
+kruait eq|chanh
+krud|bò rừng / bò tót
+kua|háng
+kuat|con vượn
+kudih|ngày mốt
+kuđuh kayơu|vỏ cây
+kukơu takai|móng chân
+kukơu tangan|móng tay
+kulid|da
+kulid kavroqh|tàn nhang
+kumei|nữ / gái
+kumei / sudit|vợ
+kumei dara sulơt|cô tiên
+kunh huq|chúng / bọn chúng / bọn nó
+kura|con rùa
+kuvao|con trâu
+kuvao dlai|trâu rừng
+kuvurei|hôm qua
+la|lách
+la at yawa|mát mẻ
+la ngaqt ea|đuối nước
+la-at|lạnh / đông / mùa đông
+la-at padraqd / la-at yao|mát / hơi lạnh
+la-at sakid|bệnh sốt
+la-at yawa|mát mẻ
+la-mhong|màu mỡ
+la-mhơn|mềm
+la-u|dừa
+lad|sân
+lad sa sraot|sân trường
+lagar|vùng / miền / tỉnh
+lagar ben|huyện
+lageh / maya|tốt / đẹp
+lahong|đu đủ
+lakei|nam / trai / đàn ông
+lakơu|xin
+lamhong|màu mỡ
+lamo|con bò
+lamo inad|bò cái
+lanei|nơi
+langar|cái cày
+langiqd|trời / bầu trời / thời tiết
+langiqd ruvud|thiên tai
+lanơqh|không gian sống / nơi sống / nơi / vị trí
+lapa|đói
+lapa rabaqh|đói khổ
+laraker|khèn bầu
+lavuh|ngã
+lavut|bọn / lũ / chúng
+lawah hudit|môi trường sống
+lawah langiqd|vòm trời
+lawah langiqd|di diện tích
+lawah tanaqh|diện tích
+laya|gừng
+liah|liếm
+lih|mãi
+lingiaq|tai
+lingiaq mhơqt|thính giác
+lisuk|cái cối
+lisuk|cối
+lor|láo
+lơt|xếp /chăn, màn/
+lu|nhiều
+lua|nhỏ / khẽ
+lua ben|nhỏ nhẹ
+luai|bơi
+luat tamaq|chui vào
+luei gơt|bỏ nhau
+luei lapa / tikid kasơnt|xóa đói / giảm nghèo
+luka|ghẻ ngứa
+luka / vung atot|amiđan
+luman|con voi
+lumaqt|mỡ / mập
+lumeit|mềm
+lupad|rết
+lupei|mơ / mộng
+luva curok|hầm chông
+luvad takai|đi bộ
+luveh|thừa
+luvuk|măng
+luwa|gầy
+m-uqd|cục yết hầu
+m'guaqh pagi|sáng mai
+mada|giàu
+madih|sôi
+maiq / wơt|về
+malaot|đêm
+man|mận
+manhiq|hát / hò
+manhiq|ca / hát
+manuiqh caphơ ahod pơr|phi công / người lái máy bay
+manuiqh|người / dân tộc
+manuiqh ma in capi|người chơi đàn cha pi
+manuiqh manhiq sri|ca sĩ
+manuiqh pato|thầy giáo
+manuiqh prong|người lớn
+manuiqh rigei tazoh tupa avih|nghệ nhân ưu tú
+manuiqh sraot|người học / học sinh
+manuiqh ura|người ta / xã hội
+manuiqh va nau thu|người đưa thư
+manuqt|gà
+maqt|bắt
+maqt|nhận
+maqt nanaqd vhud|bắt con ma
+maqt pa angan|phong tặng danh hiệu
+maqt... tuviat|lấy... ra
+mariah mda|đỏ tươi
+marơt / jrơqd|dơ
+masaot|bị nhiễm phèn
+mata|mắt
+mata takai|mắt cá chân
+matai / thit|chết
+matai tiang|chết dần
+mataqh|lưng
+maya|xinh đẹp
+maya / lageh|đẹp
+maya ganuqh|khôi ngô
+meit|mãi
+mguaqh|sáng
+mhơqt|nghe
+mhơqt đơd|nghe nói
+mhuq|có
+mhuq biah|lợi thế / có sẵn
+mhuq pran|bồi bổ
+miang|má
+mit|mít
+mơng|từ / bằng
+mơng kađo tơl niq|lâu nay
+muqd|bà
+muvah|miệng
+mvah pe / kuce|âm đạo
+nau|đi
+nau atah|đi xa
+nau ma-iaqt|đi tiểu
+nau titluat|đi theo
+nau tơ sa sraot|đi tới trường
+nauq wơl|đi về
+wơt|về
+ngaqt|làm
+ngaqt halit vuơl vila|phụng sự nhân dân
+ngơm|ngồi
+ngơm gađơk|im lặng
+ngơm sa ala|ngồi xuống
+nhul|chui vào / dũi / rúc
+niq|đây
+niq|này
+o dahar o dahar|chầm chậm
+o đah|có thể
+oh|không
+Oniq|hiện nay
+ot|nôn
+pa|ở / nơi ở / tại
+pa aga|ở ngoài
+pa amriat|tranh giành
+pa dalaot|ở trong
+pa dih nơn|đàng kia rồi
+pa dlo|trên cao
+pa samhuq|bình đẳng
+pa siad ruat|y tế
+pa sining jơt cađamt|nhận thức sâu sắc
+pa-ad|nách
+pabad|gây lây nhiễm
+pabueit|khắc phục
+padai|lúa
+padai ea|lúa nước
+padaot thit|bế tắt
+padei vha|nghỉ hè
+padei yawa|nghỉ ngơi
+padiat|nắng
+padok|nhờ / nhờ cậy
+padơk jhơ|ngồi xổm
+pađao|ấm áp
+pađaot thit|bế tắc
+pađar|bảo / sai
+pađiat|nắng
+pađiat / gha|nóng
+pađơk jhơ|ngồi xổm
+pađud kaya bơk|đựng đồ ăn
+pađut|đựng
+paga|hàng rào
+pagalah hlơu|vụt chạy lên trước
+pagat|bắc qua
+pagi|ngày mai
+pagila|lừa đảo
+pagrang|chống chọi
+pagruat|úp 
+pahi|dọa
+pahiơt|đổ lỗi
+pak|tin tưởng / nghe theo
+pak rigei|giỏi / tài giỏi
+pakat|cần / phải
+pakat pathơu|cần quán triệt
+pakeq|con tắc kè
+pakhak hatai|trấn tĩnh
+pala-at|mát
+palad takai|bàn chân / lòng bàn chân
+palad tangan|bàn tay / lòng bàn tay
+palamhong|phân bón
+palei|làng / xã
+palei humaq ranaid|xã ma nới
+paluơ|dỗ / dỗ dành
+pama-in|giải trí
+pamhơqt|lắng nghe
+pamhuq|thêm / thêm vào
+panaqh|bắn
+panat|dứa
+panoqt|bọn / lũ
+panoqt / lavut|chúng
+panoqt ke|trẻ con / trẻ em
+panuiqt|cuối cùng
+papad|cái bảng /  ván
+papad vingaqt|bàn thờ
+papah tada|cậy thế / ỷ
+papork payid|tôn trọng / kính trọng
+paprok payid|quan trọng / quý báu
+paput|quan tâm / lo lắng
+paralơut wot|lấp đi / che dấu 
+paravuq|bìm bịp 
+pari|cái đĩa
+parid|chuyển dịch
+paruh|đuổi
+pasah|ướt
+pasaluai đeh|đỡ đẻ
+pasraqt di mahau|cho đã thèm / thỏa mãn cơn nghiện
+pasrơng / paruơnh|ồn ào
+pathai|cái túi
+pathơu|cho biết / thưa
+patiad|đuổi
+patih|bắp chân / ống chân
+patikid|giảm
+pato|thầy giáo / dạy/ chỉ bảo / hướng dẫn
+pato tiang|truyền dạy / truyền đạt
+patot|đầu tiên / bắt đầu
+patơm|cử / chọn ra
+patơm pran|góp sức
+patơu|đá
+patơu asah|đá mài
+patơu tileng|đàn đá
+patuh|nổ
+pavlei|bán
+payat|tránh / ngăn ngừa
+payat cakhat|ứng phó
+payơr|xỉa
+payua|gửi
+pazak|dựa
+pazangt rigei|giáo dục
+pazangt rigei pa rigei vruaqt|giáo dục-đào tạo
+paziat|giục
+paziok gamsi samid tanaqh ea|xây dựng và bảo vệ tổ quốc
+paziok i|tôn trọng / kính trọng
+paziok tuviat|sinh ra
+paziơk gamsi samid tanaqh ea|xây dựng và bảo vệ tổ quốc
+paziơk tuviat|sinh ra
+pazrauq|chữa bệnh
+pet|hái
+pha|đùi
+phao|súng
+phia|cạnh / bên cạnh
+phid|đắng / túi mật
+phut|thân cây
+pi-od|xoài
+pica lupih|vải mỏng
+pid|ngủ
+pila|trồng
+pinang|cau
+pinhan|cái tô nhỏ
+pioh|để / để dành / để cho
+pit mata|nhắm mắt
+pitao|vua
+pitao sining|quan điểm của Đảng
+pitei|chuối
+pitut| ho / ngôi sao
+plah|xen / chen vào
+plah tleh|tỷ lệ
+plok|nhảy
+plok talei|nhảy dây
+plot|lột
+plơk|nhảy
+plud|con vắt
+pluei|bí đỏ
+po apok pitiad|trưởng họ
+po pu ea|chủ tịch nước
+poh|đánh
+poh kalid|quốc phòng
+poh kalid - pa gađơk|quốc phòng-an ninh
+poh patiad|đánh đuổi
+pơd|nhà kho
+pơh|mở
+poh patiaq / poh patiah|đánh / đuổi
+pơr|bay
+pran|khỏe / mạnh
+preuq preuq|lách tách
+priao|kêu / la
+prod|con sóc
+prok|lớn
+prong|to / lớn
+pruait|ruột
+pruait m-da|ruột non
+pruait tuha|ruột già
+pruait tupat|ruột thẳng
+pruh huh|toát mồ hơi
+pua|dọc / dọc theo
+pua zalad|dọc đường
+puait luit|ruột thừa
+puat|gia
+pud|bế
+puq kir sanrai|cái tháp
+put kir|kho tàng
+put kir sanrai kura|tháp rùa
+puve|dê
+puve / vuve|con dê
+puvhum / vuvhum|con sư tử
+puvo|cừu
+rabah rabaqd|khốn khổ
+rala|tranh
+raliah|vun lên
+ralo|thịt
+ralo aot|thịt nướng
+ralo situt / sana|thịt luộc / xào
+ranuaqt|mưu / mẹo
+rao|rửa
+ratad|đậu
+ratad cheng|đậu xanh
+rava|cái cầu
+rawak|thăm
+riat|đun
+rigei / pak rigei|giỏi
+rija tangan|ngón tay
+riji rijekd|đông đúc / rất đông
+rinơk|táo
+risiơu|tối sầm / sầm lại
+riya|rậm(rừng)
+rok|lưng
+rot|cỏ
+rơt|cỏ
+ruah|chọn
+ruah maqt|chọn lấy
+ruat sukid|ốm đau
+rud saneqt|hình dáng
+rugat|mái
+ruh|ghẻ cóc
+ruit|kéo / rút ra
+rumeaqt luei|gìn giữ / lưu danh
+rumong|con cọp
+rumuaiq|tia lửa
+rupo atot|thực quản
+rupo rok|xương sống
+rupơt|sờ
+rupơt eat|xúc giác
+rusa|con nai
+ruvha|chia ra
+ruvơu|nghìn
+ruvud|bão
+sa|một / 1 / nhà
+sa ben tidei|một lúc sau
+sa gi|nhà bếp
+sa sraot|trường / trường học
+sa tuk sa hatai|một lòng một dạ
+sa-ai|anh / chị
+sa-ai ganroh|anh hùng
+sa-ai kumei|chị
+sadad|bí đao
+sadah|sáng
+sadat|cũ
+sadot|khó thở
+sadu|đồng thanh
+sadut|đoạn / mẩu
+sađah sanaut|nổi tiếng
+sađat|cũ
+sađu|vang thanh
+sađud|đáp (trả lời)
+sagơr|trống
+sakiaot|tranh thủ
+sal|chen
+salao|mâm
+salet|thống nhất
+salet tanaqh ea|thống nhất đất nước
+saluai đeh|đỡ đẻ
+samakai|dưa hấu
+samid|gìn giữ / bảo vệ
+sanal akot|cái cối
+sanauq|tiếng / ngôn ngữ
+sanaut|tiếng / ngôn ngữ
+sanaut manhiq|tiếng hát
+saniqt|hợp tác
+sanit|thiêng liêng
+saolut|đoạn / mẩu
+sapluh|mười /10
+saprai|gieo / sạ
+sara|muối
+sarada|đường ăn
+sat anaqd|tử cung
+si|và / với
+siad|bình yên
+siad - ueit|vui / mừng
+siad hatai|vui lòng
+siad maya|đẹp tươi
+siad tlao|vui cười
+sigơt|cùng nhau
+sijươl|nhẹ
+sining|nghĩ /suy nghĩ/
+sining khiang|mơ ước
+sir|kín
+sod|giã
+soh|toàn / hết cả / tất cả
+sol mata|giác mạc
+sradqq|ná
+sraot|học
+sraot đơm gamsi ngaqt titluat|học tập và làm theo
+sraqd|ná
+sreq|nợ
+sroh|trổ bông
+suait|rút ra / lấy ra
+suait yawa|thở
+sudid|vợ / người vợ
+sudơut|kiến
+suei|lâu
+suei suei|thỉnh thoảng / lâu lâu
+sula|lá
+sula kơ|lá cờ
+sumwa|vọng / vang vọng
+sumwua atah|vang xa
+sun zua|vắng vẻ / hoang vắng
+surat akhar|văn hóa
+ta sa kir vuơl sraot việt nam:|bảo tàng dân tộc học việt nam
+ta-alid|con bướm
+ta-anrot|con cóc
+tada|ngực
+tada anaqd kumei|ngực phụ nữ
+tadiang|dọc (gt)
+tadid|quạt / quát / la
+tadluh di avih|hơn hết / nhất
+tadq|sét
+tadut|dây (bí...)
+tagalo|con thằn lằn
+tagud|đứng
+tagud dơk|đứng dậy
+tahanreiq / takađa|giật mình
+tajoh|chậm
+takai|chân
+takatuat|bất ngờ
+takuai|cổ
+tal duah patơm|bộ sưu tập
+tal va ar|tác phẩm
+talawar kod|võng mạc
+talawir mata|nhãn cầu
+talei|dây
+talei urat|dây thần kinh / gân
+taling talang|rộn ràng
+taluit|út
+tamaq|vào / đi vào
+tamoq|khác / người khác / nơi khác
+tanaqd|đất
+tanaqh ea|đất nước
+tanaqt|nấu
+taneqh|cái bật lửa
+tangan|tay
+tangan rugei|khéo tay
+tangei|bắp / ngô
+tangei điơt|bắp nếp
+tangei sruai|bắp đá
+tano|đực
+tapai|rượu cần
+tapuk|bột
+tapuơh|bật ra / mở ra
+tapuơl|bọn / lũ / lực lượng
+tapuơl vuol manuiqh radlai|cộng đồng người Raglai
+tapur|mâm bếp
+taqd ga|nhưng
+taracod|ngày kia kìa
+taradih|ngày kia
+taragh-hod|ngày kìa
+tarapai|con thỏ
+tasaid|rửa
+tasi| lược / nải
+tasid|biển
+tasid yuat|biển Việt Nam
+tat|sét / chật
+tatlah|tách ra
+tatoh|gõ
+tatut mata|mí mắt
+tavlok hatai|nổi khùng
+thiơud|thiếu
+tho|cầm
+thok|dao
+thơi|trán
+thơk|dao
+thơu|biết / hiểu biết
+thơu pak|hiểu
+thu|khô
+thuk|thung lũng
+thut|năm
+thut anaqt|năm sau
+thut dih|năm kia
+thut luniq|năm ngoái
+thut niq|năm nay
+thut sadih|năm kìa
+thut sraot|năm học
+ti ngiaq|hỏi
+tia|rèn
+tiad|đuổi / đuổi theo
+tiang|dần / dần dà
+ticei|chị
+tico|cháu
+ticoh sriqd|băm nhỏ / cháu
+tidei|sau / phía sau
+Tiếng Raglai|Tiếng Việt
+tigei|răng
+tikei|nhấn mạnh / dặn dò
+tikei ayat|điều hành
+tikuh|con chuột
+tingiaq|hỏi
+tisiuq|nhăn nheo
+titluat|theo / đi theo
+tizuh|bảy / 7
+tlao|cười
+tlaot|chiều
+tlat|con trăn
+tloh|đứt
+tlơu|ba / 3
+tlơu patikid / tlơu did tagud|ba giảm ba tăng
+tlơu voh patơu|ba cái đá làm kiền bếp
+tlu / tlai|dương vật
+to tidei / tơ garok|đằng sau
+tod|mông
+toh|cởi / đứt
+tol|đến
+tot|cạnh / giáp
+tơ|phía / về phía
+tơl|tới / đến / lớp
+trak|đắt
+traq|nặng
+trat|nặng
+trei pađao|no ấm
+trok|cà
+trok masaot|cà chua
+trơm|cái vòi
+tru/padod|bắt lên
+trut|xuống
+tu m-nhơu|nấc
+tu-ud|đầu gối
+tuba|nhìn / theo dõi / thị giác
+tuha|già
+tuhlat|dao phát
+tuk|bụng
+tuki|sừng
+tukid|ít
+tula|xương
+tula awad tangan|xương cánh tay
+tula cađah akot|xương sọ
+tula risuqk|xương sườn
+tula tatut tu-ud|xương bánh chè
+tula vara|xương đòn
+tula voh tod|xương chậu
+tumun|dưa leo
+tumun ea|dưa gang
+tumuqh|mọc
+tumya|múa
+tupa|sải tay / phía trước
+tupuk|bột
+tupuk zaman|bột ngọt
+tuveit|mòn
+tuvhad|hắt xì
+tuviat|ra
+twiq|châm (lửa)
+u|chồng / người chồng
+uan|rất / lắm
+ueit|vui mừng / sung sướng
+ugha|rễ
+uka|chưa
+uka zơ oh|chưa bao giờ
+uka-oh|chưa có
+ula|con rắn / rồng
+ula aneh|rắn nhỏ
+un|heo / lợn
+ura| người ta / ai 
+urat|dây chằng / gân / thần kinh
+urat darah|mạch máu
+urat dlo|hệ thần kinh
+usar|hạt / đạn / cơ bắp
+va|đưa / mang
+va maiq|thu nhập / mang đến
+va nau|đem ra / đem đi
+va-ar|giấy
+vagơt|cùng nhau / chung tay
+vah|quét
+vai|cái lồng / cái giỏ
+vala|ngà 
+valid|bện
+vanau/ vrei|đưa
+vaneqt|lăng / mộ
+vara|vai
+vat|đầy
+vhiai|quen / thường / hay
+vhiar|thấp
+vhoh|nhát / nhút nhát
+vhum|vùng / miền
+vidhi atơu|lễ bỏ mả
+viđu|trôi
+vilad|tháng / mùa / múc
+vilok darah|mạch máu / tĩnh mạch
+vilok tamaq tuviat|hệ tiêu hóa
+vilơu|lông / râu / ria / tóc
+vinaiq|cái
+ving vik|thình thịch
+vingaq|hoa / chữ
+vingun ea|giếng nước
+vinuqd|cây đa
+vio|đấm
+visa|chồng
+visat|rốn
+viya|con cá sấu
+vizeh|giống
+vizơu zrau|bác sĩ / thầy thuốc
+vlah|chẻ / bổ
+vlei|mua
+vlid|cuồn cuộn
+vloh|rồi
+vlud|hơn
+voh|quả / chiếc / cái / việc / trái / giặt
+voh la-u|tim
+voh patuh|bom
+voh sa|gia đình
+voh siad|niềm vui
+voh tanaqh|trái đất
+voh tlu|tinh hoàn
+voh tod|hông
+vok / vuk|dạ dày
+vơ - ikad vơ|cá tràu
+vơd|gặp
+vrah|gạo
+vrei|cho / thực tế
+vruaqt|việc / công việc
+vruh|vọt ra
+vu|cơm
+vuh|bỏ thêm
+vuit|nhổ
+vumao|nấm
+vuơl manuidh|loài người
+vuơl Raglai| người Raglai
+vuơl pak|uy tín với dân
+vuơl po|dân chủ
+vuơl vila|nhân dân
+wa|bác / chú / cậu / cô / dì
+wa kumei pato|cô giáo
+wa lakei pato|thầy giáo
+wa naiq / wa no|cô / chú / cậu / dì
+wah|viết / câu
+war bơk|bữa ăn
+wat|mùa khô
+wet|liền / ngay
+wid|đục
+wih tuba|ngoái nhìn
+wik|xung quanh
+wil|tròn
+wơr|quên
+ya|thần / thánh / tâm linh
+yad|bước / đếm / tính toán
+yah|giảng / xét xử
+yat yod|sướng
+yawa|hơi thở / tiếng / nhạc / sức khỏe
+yod|gùi / gùi lớn
+yok|giơ lên
+yot pađud brơut| ống đựng tên
+yơ|như / thế nào / mặc dù
+yơ vhiai|thường / bình thường
+yơr|dâng / nâng cao / phát huy
+yu|đi dạo / dạo
+yuat|dân tộc Kinh
+z alut|cái tô lớn
+zabu|phơi
+zad|vận động
+zagou|gấu
+zah|phát / nhộn nhịp
+zak|chật
+zal|bận
+zalad|đường đi / chính sách / chiến lược
+zale|cái cuốc
+zanang|tường / vách
+zangt|khôn / tài giỏi
+zat|nổ / vang
+zeq|gần / sắp
+zhar|đẩy
+zhok cet|xúc đi
+zhul paziat|thúc giục
+zin pariat|kinh phí
+ziơk|được / thành
+zo|cái rìu
+zơt|hết / tất cả
+zrau|thuốc chữa bệnh / ma túy
+zro|cái ché nhỏ
+zrok|cái li
+zud|đen
+zulukal|truyện cổ / sử thi
+zulukiak|khuỷu tay
+dalapat|tám / 8
+salapat|chín / 9
+ratuh|trăm
+tuman|triệu
+ayuh ranam|cảm ơn
+lumaq|năm / 5
+nam|sáu / 6
+
+ </script>
+
+<script>
+    const dict = new Map();
+    const indexedKeys = {};
+    const VALID_CHARS = /[a-zA-Zàáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/;
+
+    // Phân tách nạp dữ liệu thành từng mảnh nhỏ để KHÔNG TREO
+    async function khoiTao() {
+        const raw = document.getElementById('raw_data').textContent;
+        const lines = raw.split('\n').filter(l => l.includes('|'));
+        const total = lines.length;
+        
+        const btn = document.getElementById('btnDich');
+        const progress = document.getElementById('progress');
+        const status = document.getElementById('loadStatus');
+
+        let i = 0;
+        const batchSize = 100;
+
+        async function step() {
+            const limit = Math.min(i + batchSize, total);
+            for (; i < limit; i++) {
+                const line = lines[i].toLowerCase().trim();
+                const [ragStr, vieStr] = line.split('|').map(s => s.trim());
+                if (!ragStr || !vieStr) continue;
+
+                const ragParts = ragStr.split('/').map(s => s.trim());
+                const vieParts = vieStr.split('/').map(s => s.trim());
+
+                // Nạp chiều Raglai -> Việt
+                ragParts.forEach(r => {
+                    if (r) {
+                        dict.set(r, { trans: vieStr, type: 'r' });
+                        addKeyToIndex(r);
+                    }
+                });
+
+                // Nạp chiều Việt -> Raglai
+                vieParts.forEach(v => {
+                    if (v) {
+                        dict.set(v, { trans: ragStr, type: 'v' });
+                        addKeyToIndex(v);
+                    }
+                });
+            }
+
+            const pct = Math.floor((i / total) * 100);
+            progress.style.width = pct + '%';
+            status.innerText = `Đang nạp dữ liệu: ${pct}% (${i}/${total})`;
+
+            if (i < total) {
+                setTimeout(step, 0); // Trả lại luồng cho trình duyệt vẽ giao diện
+            } else {
+                finalize();
+            }
+        }
+        step();
+    }
+
+    function addKeyToIndex(key) {
+        const char = key[0];
+        if (!indexedKeys[char]) indexedKeys[char] = new Set();
+        indexedKeys[char].add(key);
+    }
+
+    function finalize() {
+        // Sắp xếp các từ khóa từ dài đến ngắn để dịch cụm từ trước từ đơn
+        for (const char in indexedKeys) {
+            indexedKeys[char] = Array.from(indexedKeys[char]).sort((a, b) => b.length - a.length);
+        }
+        document.getElementById('loadStatus').innerText = "✅ ĐÃ SẴN SÀNG!";
+        const btn = document.getElementById('btnDich');
+        btn.disabled = false;
+        btn.innerText = "DỊCH NGAY";
+    }
+
+    // --- LOGIC DỊCH SỐ (VÍ DỤ 2015) ---
+    function dichSo(n) {
+        const dv = ["soh", "sa", "dua", "tlơu", "pad", "lumaq", "nam", "tizuh", "dalapat", "salapat"];
+        if (n < 10) return dv[n];
+        if (n < 100) {
+            let chuc = Math.floor(n / 10), dvi = n % 10;
+            let s = (chuc === 1) ? "sa pluh" : dv[chuc] + " pluh";
+            return dvi === 0 ? s : s + " " + dv[dvi];
+        }
+        if (n < 1000) {
+            let tram = Math.floor(n / 100), du = n % 100;
+            let s = dv[tram] + " ratuh";
+            return du === 0 ? s : s + " " + dichSo(du);
+        }
+        if (n < 1000000) {
+            let nghin = Math.floor(n / 1000), du = n % 1000;
+            let s = dichSo(nghin) + " ruvơu";
+            return du === 0 ? s : s + " " + dichSo(du);
+        }
+        return n.toString();
+    }
+
+    // Kiểm tra ranh giới từ (Tránh lỗi tách từ cafe)
+    function isWordBoundary(text, index, len) {
+        const prev = text[index - 1], next = text[index + len];
+        return (!prev || !VALID_CHARS.test(prev)) && (!next || !VALID_CHARS.test(next));
+    }
+
+    // --- PHÂN BIỆT ĐỒNG ÂM (KHÔNG / NĂM) ---
+    function xuLyDongAm(word, fullInput, index) {
+        const low = fullInput.toLowerCase();
+        if (word === "không") {
+            const sau = low.substring(index + 5).trim();
+            if (sau === "" || /^[\?\!\.]/.test(sau)) return "cet";
+            if (/\b(số|mã|tổng)\b/.test(low.substring(0, index))) return "soh";
+            return "oh";
+        }
+        if (word === "năm") {
+            const sau = low.substring(index + 3).trim();
+            const truoc = low.substring(0, index).trim();
+            if (/^\d+/.test(sau) || /\b(nay|sau|trước|kìa|mốt|học)\b/.test(sau) || /\b(vào|đầu|cuối)\b/.test(truoc)) {
+                return "thut";
+            }
+            return "lumaq";
+        }
+        return null;
+    }
+
+    function xuLyDich() {
+        const input = document.getElementById("input").value.trim();
+        if (!input) return;
+
+        const lowInput = input.toLowerCase();
+        let i = 0, tokens = [];
+
+        while (i < lowInput.length) {
+            // Xử lý khoảng trắng/dấu câu
+            if (/\s|[.,!?;:]/.test(lowInput[i])) {
+                tokens.push({ val: input[i], isRaw: true });
+                i++; continue;
+            }
+
+            // Xử lý số
+            let numMatch = lowInput.substring(i).match(/^\d+/);
+            if (numMatch) {
+                tokens.push({ val: dichSo(parseInt(numMatch[0])), isTranslated: true });
+                i += numMatch[0].length; continue;
+            }
+
+            // Tra từ
+            let found = false;
+            const char = lowInput[i];
+            const list = indexedKeys[char] || [];
+
+            for (const key of list) {
+                if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
+                    let data = dict.get(key);
+                    let transVal = data.trans;
+                    if (data.type === 'v') {
+                        const logicVal = xuLyDongAm(key, lowInput, i);
+                        if (logicVal) transVal = logicVal;
+                    }
+                    tokens.push({ val: transVal, isTranslated: true });
+                    i += key.length; found = true; break;
+                }
+            }
+
+            if (!found) {
+                let j = i;
+                while (j < lowInput.length && !/\s|[.,!?;:\d]/.test(lowInput[j])) j++;
+                tokens.push({ val: input.substring(i, j), isRaw: true });
+                i = j;
+            }
+        }
+
+        const res = tokens.map(tk => tk.isTranslated ? `<span class="highlight">${tk.val}</span>` : tk.val).join("");
+        document.getElementById("output").innerHTML = res;
+    }
+
+    window.onload = khoiTao;
+</script>
+</body>
+</html>
