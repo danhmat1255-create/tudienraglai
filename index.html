@@ -17,8 +17,12 @@
         .btn-dich { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; }
         .btn-dich:disabled { background: #ccc; cursor: not-allowed; }
         .result-box { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid var(--primary); min-height: 50px; }
-        #output { font-size: 18px; line-height: 1.6; color: #202124; word-wrap: break-word; }
-        .highlight { color: #1a73e8; font-weight: bold; }
+        #output { font-size: 18px; line-height: 1.8; color: #202124; word-wrap: break-word; }
+        
+        /* CSS MỚI: Dành cho từ có nhiều nghĩa */
+        .highlight { color: #1a73e8; font-weight: bold; cursor: pointer; border-bottom: 1px dashed #1a73e8; padding: 0 2px; }
+        .more-meanings { display: none; color: #5f6368; font-weight: normal; font-size: 14px; font-style: italic; }
+        .expanded .more-meanings { display: inline; }
     </style>
 </head>
 <body>
@@ -1377,11 +1381,66 @@ kakud| chào
         let i = 0, tokens = [];
 
         while (i < lowInput.length) {
-            // Xử lý khoảng trắng/dấu câu
             if (/\s|[.,!?;:]/.test(lowInput[i])) {
                 tokens.push({ val: input[i], isRaw: true });
                 i++; continue;
             }
+
+            let numMatch = lowInput.substring(i).match(/^\d+/);
+            if (numMatch) {
+                tokens.push({ val: dichSo(parseInt(numMatch[0])), isTranslated: true });
+                i += numMatch[0].length; continue;
+            }
+
+            let found = false;
+            const char = lowInput[i];
+            const list = indexedKeys[char] || [];
+
+            for (const key of list) {
+                if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
+                    let data = dict.get(key);
+                    let transVal = data.trans;
+                    if (data.type === 'v') {
+                        const logicVal = xuLyDongAm(key, lowInput, i);
+                        if (logicVal) transVal = logicVal;
+                    }
+
+                    // TÁCH NGHĨA: Nghĩa đầu tiên và nghĩa phụ
+                    const meanings = transVal.split('/').map(m => m.trim());
+                    const first = meanings[0];
+                    const others = meanings.slice(1).join(', ');
+
+                    tokens.push({ 
+                        first: first, 
+                        others: others, 
+                        isTranslated: true 
+                    });
+
+                    i += key.length; found = true; break;
+                }
+            }
+
+            if (!found) {
+                let j = i;
+                while (j < lowInput.length && !/\s|[.,!?;:\d]/.test(lowInput[j])) j++;
+                tokens.push({ val: input.substring(i, j), isRaw: true });
+                i = j;
+            }
+        }
+
+        // TẠO HTML: Thêm sự kiện click để hiện nghĩa phụ
+        const res = tokens.map(tk => {
+            if (tk.isTranslated) {
+                if (tk.others) {
+                    return `<span class="highlight" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
+                }
+                return `<span class="highlight">${tk.first}</span>`;
+            }
+            return tk.val;
+        }).join("");
+
+        document.getElementById("output").innerHTML = res;
+    }
 
             // Xử lý số
             let numMatch = lowInput.substring(i).match(/^\d+/);
@@ -1424,6 +1483,7 @@ kakud| chào
 </script>
 </body>
 </html>
+
 
 
 
