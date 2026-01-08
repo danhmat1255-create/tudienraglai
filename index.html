@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raglai Translate v21.0</title>
+    <title>Raglai Translate v22.0</title>
     <style>
         :root { --primary: #1a73e8; --bg: #f1f3f4; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
@@ -19,7 +19,7 @@
         .result-box { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid var(--primary); min-height: 50px; }
         #output { font-size: 18px; line-height: 1.8; color: #202124; word-wrap: break-word; }
         
-        /* CSS MỚI: Dành cho từ có nhiều nghĩa */
+        /* CSS CHO TỪ CÓ NHIỀU NGHĨA */
         .highlight { color: #1a73e8; font-weight: bold; cursor: pointer; border-bottom: 1px dashed #1a73e8; padding: 0 2px; }
         .more-meanings { display: none; color: #5f6368; font-weight: normal; font-size: 14px; font-style: italic; }
         .expanded .more-meanings { display: inline; }
@@ -28,10 +28,10 @@
 <body>
 
 <div class="container">
-    <h2>Raglai Translate v21.0</h2>
+    <h2>Raglai Translate v22.0</h2>
     <div class="status-container">
         <div class="progress-bar"><div id="progress"></div></div>
-        <div id="loadStatus" class="status-text">Đang khởi khởi động hệ thống...</div>
+        <div id="loadStatus" class="status-text">Đang khởi động hệ thống...</div>
     </div>
     
     <textarea id="input" placeholder="Nhập tiếng Việt hoặc tiếng Raglai..."></textarea>
@@ -40,7 +40,6 @@
 </div>
 
 <script id="raw_data" type="text/plain">
-
 achid achid|phức tạp
 acut|muỗng
 ada|vịt
@@ -1247,21 +1246,18 @@ lumaq|năm / 5
 nam|sáu / 6
 manei ea| tắm
 kakud| chào
-
- </script>
+</script>
 
 <script>
     const dict = new Map();
     const indexedKeys = {};
     const VALID_CHARS = /[a-zA-Zàáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/;
 
-    // Phân tách nạp dữ liệu thành từng mảnh nhỏ để KHÔNG TREO
     async function khoiTao() {
         const raw = document.getElementById('raw_data').textContent;
         const lines = raw.split('\n').filter(l => l.includes('|'));
         const total = lines.length;
         
-        const btn = document.getElementById('btnDich');
         const progress = document.getElementById('progress');
         const status = document.getElementById('loadStatus');
 
@@ -1272,13 +1268,15 @@ kakud| chào
             const limit = Math.min(i + batchSize, total);
             for (; i < limit; i++) {
                 const line = lines[i].toLowerCase().trim();
-                const [ragStr, vieStr] = line.split('|').map(s => s.trim());
-                if (!ragStr || !vieStr) continue;
+                const parts = line.split('|').map(s => s.trim());
+                if (parts.length < 2) continue;
+                
+                const ragStr = parts[0];
+                const vieStr = parts[1];
 
                 const ragParts = ragStr.split('/').map(s => s.trim());
                 const vieParts = vieStr.split('/').map(s => s.trim());
 
-                // Nạp chiều Raglai -> Việt
                 ragParts.forEach(r => {
                     if (r) {
                         dict.set(r, { trans: vieStr, type: 'r' });
@@ -1286,7 +1284,6 @@ kakud| chào
                     }
                 });
 
-                // Nạp chiều Việt -> Raglai
                 vieParts.forEach(v => {
                     if (v) {
                         dict.set(v, { trans: ragStr, type: 'v' });
@@ -1300,7 +1297,7 @@ kakud| chào
             status.innerText = `Đang nạp dữ liệu: ${pct}% (${i}/${total})`;
 
             if (i < total) {
-                setTimeout(step, 0); // Trả lại luồng cho trình duyệt vẽ giao diện
+                setTimeout(step, 0);
             } else {
                 finalize();
             }
@@ -1315,7 +1312,6 @@ kakud| chào
     }
 
     function finalize() {
-        // Sắp xếp các từ khóa từ dài đến ngắn để dịch cụm từ trước từ đơn
         for (const char in indexedKeys) {
             indexedKeys[char] = Array.from(indexedKeys[char]).sort((a, b) => b.length - a.length);
         }
@@ -1325,52 +1321,9 @@ kakud| chào
         btn.innerText = "DỊCH NGAY";
     }
 
-    // --- LOGIC DỊCH SỐ (VÍ DỤ 2015) ---
-    function dichSo(n) {
-        const dv = ["soh", "sa", "dua", "tlơu", "pad", "lumaq", "nam", "tizuh", "dalapat", "salapat"];
-        if (n < 10) return dv[n];
-        if (n < 100) {
-            let chuc = Math.floor(n / 10), dvi = n % 10;
-            let s = (chuc === 1) ? "sa pluh" : dv[chuc] + " pluh";
-            return dvi === 0 ? s : s + " " + dv[dvi];
-        }
-        if (n < 1000) {
-            let tram = Math.floor(n / 100), du = n % 100;
-            let s = dv[tram] + " ratuh";
-            return du === 0 ? s : s + " " + dichSo(du);
-        }
-        if (n < 1000000) {
-            let nghin = Math.floor(n / 1000), du = n % 1000;
-            let s = dichSo(nghin) + " ruvơu";
-            return du === 0 ? s : s + " " + dichSo(du);
-        }
-        return n.toString();
-    }
-
-    // Kiểm tra ranh giới từ (Tránh lỗi tách từ cafe)
     function isWordBoundary(text, index, len) {
         const prev = text[index - 1], next = text[index + len];
         return (!prev || !VALID_CHARS.test(prev)) && (!next || !VALID_CHARS.test(next));
-    }
-
-    // --- PHÂN BIỆT ĐỒNG ÂM (KHÔNG / NĂM) ---
-    function xuLyDongAm(word, fullInput, index) {
-        const low = fullInput.toLowerCase();
-        if (word === "không") {
-            const sau = low.substring(index + 5).trim();
-            if (sau === "" || /^[\?\!\.]/.test(sau)) return "cet";
-            if (/\b(số|mã|tổng)\b/.test(low.substring(0, index))) return "soh";
-            return "oh";
-        }
-        if (word === "năm") {
-            const sau = low.substring(index + 3).trim();
-            const truoc = low.substring(0, index).trim();
-            if (/^\d+/.test(sau) || /\b(nay|sau|trước|kìa|mốt|học)\b/.test(sau) || /\b(vào|đầu|cuối)\b/.test(truoc)) {
-                return "thut";
-            }
-            return "lumaq";
-        }
-        return null;
     }
 
     function xuLyDich() {
@@ -1386,12 +1339,6 @@ kakud| chào
                 i++; continue;
             }
 
-            let numMatch = lowInput.substring(i).match(/^\d+/);
-            if (numMatch) {
-                tokens.push({ val: dichSo(parseInt(numMatch[0])), isTranslated: true });
-                i += numMatch[0].length; continue;
-            }
-
             let found = false;
             const char = lowInput[i];
             const list = indexedKeys[char] || [];
@@ -1400,35 +1347,24 @@ kakud| chào
                 if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
                     let data = dict.get(key);
                     let transVal = data.trans;
-                    if (data.type === 'v') {
-                        const logicVal = xuLyDongAm(key, lowInput, i);
-                        if (logicVal) transVal = logicVal;
-                    }
 
-                    // TÁCH NGHĨA: Nghĩa đầu tiên và nghĩa phụ
                     const meanings = transVal.split('/').map(m => m.trim());
                     const first = meanings[0];
                     const others = meanings.slice(1).join(', ');
 
-                    tokens.push({ 
-                        first: first, 
-                        others: others, 
-                        isTranslated: true 
-                    });
-
+                    tokens.push({ first, others, isTranslated: true });
                     i += key.length; found = true; break;
                 }
             }
 
             if (!found) {
                 let j = i;
-                while (j < lowInput.length && !/\s|[.,!?;:\d]/.test(lowInput[j])) j++;
+                while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
                 tokens.push({ val: input.substring(i, j), isRaw: true });
                 i = j;
             }
         }
 
-        // TẠO HTML: Thêm sự kiện click để hiện nghĩa phụ
         const res = tokens.map(tk => {
             if (tk.isTranslated) {
                 if (tk.others) {
@@ -1442,51 +1378,7 @@ kakud| chào
         document.getElementById("output").innerHTML = res;
     }
 
-            // Xử lý số
-            let numMatch = lowInput.substring(i).match(/^\d+/);
-            if (numMatch) {
-                tokens.push({ val: dichSo(parseInt(numMatch[0])), isTranslated: true });
-                i += numMatch[0].length; continue;
-            }
-
-            // Tra từ
-            let found = false;
-            const char = lowInput[i];
-            const list = indexedKeys[char] || [];
-
-            for (const key of list) {
-                if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
-                    let data = dict.get(key);
-                    let transVal = data.trans;
-                    if (data.type === 'v') {
-                        const logicVal = xuLyDongAm(key, lowInput, i);
-                        if (logicVal) transVal = logicVal;
-                    }
-                    tokens.push({ val: transVal, isTranslated: true });
-                    i += key.length; found = true; break;
-                }
-            }
-
-            if (!found) {
-                let j = i;
-                while (j < lowInput.length && !/\s|[.,!?;:\d]/.test(lowInput[j])) j++;
-                tokens.push({ val: input.substring(i, j), isRaw: true });
-                i = j;
-            }
-        }
-
-        const res = tokens.map(tk => tk.isTranslated ? `<span class="highlight">${tk.val}</span>` : tk.val).join("");
-        document.getElementById("output").innerHTML = res;
-    }
-
     window.onload = khoiTao;
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
