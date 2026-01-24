@@ -20,9 +20,19 @@
         #output { font-size: 18px; line-height: 1.8; color: #202124; word-wrap: break-word; }
         
         /* CSS CHO TỪ CÓ NHIỀU NGHĨA */
-        .highlight { color: #1a73e8; font-weight: bold; cursor: pointer; border-bottom: 1px dashed #1a73e8; padding: 0 2px; }
-        .more-meanings { display: none; color: #5f6368; font-weight: normal; font-size: 14px; font-style: italic; }
-        .expanded .more-meanings { display: inline; }
+        .highlight.has-multiple { 
+    color: #d93025; /* Màu đỏ */
+    border-bottom-color: #d93025; 
+}
+
+.more-meanings { 
+    display: none; 
+    color: #5f6368; 
+    font-weight: normal; 
+    font-size: 14px; 
+    font-style: italic; 
+}
+.expanded .more-meanings { display: inline; }
     </style>
 </head>
 <body>
@@ -1453,14 +1463,15 @@ pu| ủy ban nhân dân
         }
 
         const res = tokens.map(tk => {
-            if (tk.isTranslated) {
-                if (tk.others) {
-                    return `<span class="highlight" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
-                }
-                return `<span class="highlight">${tk.first}</span>`;
-            }
-            return tk.val;
-        }).join("");
+    if (tk.isTranslated) {
+        if (tk.others) {
+            // Thêm class 'has-multiple' nếu có nhiều nghĩa
+            return `<span class="highlight has-multiple" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
+        }
+        return `<span class="highlight">${tk.first}</span>`;
+    }
+    return tk.val;
+}).join("");
 
         document.getElementById("output").innerHTML = res;
     }
@@ -1469,6 +1480,7 @@ pu| ủy ban nhân dân
 </script>
 </body>
 </html>
+
 
 
 
