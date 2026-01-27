@@ -1383,6 +1383,27 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 
 <script>
+    function docSoTiengViet(n) {
+    const chu = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+    if (n < 10) return chu[n];
+    if (n < 20) return n === 10 ? "mười" : "mười " + (n % 10 === 5 ? "lăm" : chu[n % 10]);
+    if (n < 100) {
+        let chuc = Math.floor(n / 10), dv = n % 10;
+        let st = chu[chuc] + " mươi";
+        if (dv === 1) st += " mốt";
+        else if (dv === 5) st += " lăm";
+        else if (dv !== 0) st += " " + chu[dv];
+        return st;
+    }
+    if (n < 1000) {
+        let tram = Math.floor(n / 100), cl = n % 100;
+        let st = chu[tram] + " trăm";
+        if (cl > 0 && cl < 10) st += " lẻ " + chu[cl];
+        else if (cl >= 10) st += " " + docSoTiengViet(cl);
+        return st;
+    }
+    return n.toString();
+}
     const dict = new Map();
     const indexedKeys = {};
     const VALID_CHARS = /[a-zA-Zàáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/;
@@ -1461,62 +1482,69 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
     }
 
     function xuLyDich() {
-        const input = document.getElementById("input").value.trim();
-        if (!input) return;
+    let rawInput = document.getElementById("input").value.trim();
+    if (!rawInput) return;
 
-        const lowInput = input.toLowerCase();
-        let i = 0, tokens = [];
+    // --- ĐOẠN THÊM MỚI: KIỂM TRA VÀ CHUYỂN SỐ ---
+    let inputForTranslation = rawInput;
+    if (!isNaN(rawInput)) {
+        inputForTranslation = docSoTiengViet(parseInt(rawInput));
+    }
+    // --------------------------------------------
 
-        while (i < lowInput.length) {
-            if (/\s|[.,!?;:]/.test(lowInput[i])) {
-                tokens.push({ val: input[i], isRaw: true });
-                i++; continue;
-            }
+    const lowInput = inputForTranslation.toLowerCase();
+    let i = 0, tokens = [];
 
-            let found = false;
-            const char = lowInput[i];
-            const list = indexedKeys[char] || [];
+    while (i < lowInput.length) {
+        if (/\s|[.,!?;:]/.test(lowInput[i])) {
+            tokens.push({ val: inputForTranslation[i], isRaw: true }); // Dùng inputForTranslation thay vì input gốc
+            i++; continue;
+        }
 
-            for (const key of list) {
-                if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
-                    let data = dict.get(key);
-                    let transVal = data.trans;
+        let found = false;
+        const char = lowInput[i];
+        const list = indexedKeys[char] || [];
 
-                    const meanings = transVal.split('/').map(m => m.trim());
-                    const first = meanings[0];
-                    const others = meanings.slice(1).join(', ');
+        for (const key of list) {
+            if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
+                let data = dict.get(key);
+                let transVal = data.trans;
 
-                    tokens.push({ first, others, isTranslated: true });
-                    i += key.length; found = true; break;
-                }
-            }
+                const meanings = transVal.split('/').map(m => m.trim());
+                const first = meanings[0];
+                const others = meanings.slice(1).join(', ');
 
-            if (!found) {
-                let j = i;
-                while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
-                tokens.push({ val: input.substring(i, j), isRaw: true });
-                i = j;
+                tokens.push({ first, others, isTranslated: true });
+                i += key.length; found = true; break;
             }
         }
 
-        const res = tokens.map(tk => {
-    if (tk.isTranslated) {
-        if (tk.others) {
-            // Thêm class 'has-multiple' nếu có nhiều nghĩa
-            return `<span class="highlight has-multiple" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
+        if (!found) {
+            let j = i;
+            while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
+            tokens.push({ val: inputForTranslation.substring(i, j), isRaw: true }); // Dùng inputForTranslation
+            i = j;
         }
-        return `<span class="highlight">${tk.first}</span>`;
     }
-    return tk.val;
-}).join("");
 
-        document.getElementById("output").innerHTML = res;
-    }
+    const res = tokens.map(tk => {
+        if (tk.isTranslated) {
+            if (tk.others) {
+                return `<span class="highlight has-multiple" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
+            }
+            return `<span class="highlight">${tk.first}</span>`;
+        }
+        return tk.val;
+    }).join("");
+
+    document.getElementById("output").innerHTML = res;
+}
 
     window.onload = khoiTao;
 </script>
 </body>
 </html>
+
 
 
 
