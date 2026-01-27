@@ -1385,24 +1385,40 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 <script>
     function docSoTiengViet(n) {
     const chu = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
-    if (n < 10) return chu[n];
-    if (n < 20) return n === 10 ? "mười" : "mười " + (n % 10 === 5 ? "lăm" : chu[n % 10]);
-    if (n < 100) {
-        let chuc = Math.floor(n / 10), dv = n % 10;
-        let st = chu[chuc] + " mươi";
-        if (dv === 1) st += " mốt";
-        else if (dv === 5) st += " lăm";
+    if (n === 0) return chu[0];
+
+    function doc3So(num, showTram) {
+        let tram = Math.floor(num / 100);
+        let chuc = Math.floor((num % 100) / 10);
+        let dv = num % 10;
+        let st = "";
+
+        if (tram > 0 || showTram) {
+            st = chu[tram] + " trăm";
+            if (chuc === 0 && dv !== 0) st += " lẻ";
+        }
+        if (chuc === 1) st += " mười";
+        else if (chuc > 1) st += " " + chu[chuc] + " mươi";
+
+        if (dv === 1 && chuc > 1) st += " mốt";
+        else if (dv === 5 && chuc > 0) st += " lăm";
         else if (dv !== 0) st += " " + chu[dv];
-        return st;
+        
+        return st.trim();
     }
-    if (n < 1000) {
-        let tram = Math.floor(n / 100), cl = n % 100;
-        let st = chu[tram] + " trăm";
-        if (cl > 0 && cl < 10) st += " lẻ " + chu[cl];
-        else if (cl >= 10) st += " " + docSoTiengViet(cl);
-        return st;
-    }
-    return n.toString();
+
+    let ketQua = "";
+    let ty = Math.floor(n / 1000000000);
+    let trieu = Math.floor((n % 1000000000) / 1000000);
+    let nghin = Math.floor((n % 1000000) / 1000);
+    let donvi = n % 1000;
+
+    if (ty > 0) ketQua += doc3So(ty, false) + " tỷ ";
+    if (trieu > 0) ketQua += doc3So(trieu, ty > 0) + " triệu ";
+    if (nghin > 0) ketQua += doc3So(nghin, trieu > 0) + " nghìn ";
+    if (donvi > 0 || ketQua === "") ketQua += doc3So(donvi, nghin > 0 || trieu > 0);
+
+    return ketQua.trim();
 }
     const dict = new Map();
     const indexedKeys = {};
@@ -1544,6 +1560,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
