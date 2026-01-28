@@ -764,7 +764,7 @@ niq|đây / nay
 niq|này
 o dahar o dahar|chầm chậm
 o đah|có thể
-oh / soh / cet / |không / 0
+oh / soh / cet / |không / 0 / lẻ / linh
 Oniq|hiện nay
 ot|nôn
 pa aga|ở ngoài
@@ -1504,6 +1504,21 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
     let rawInput = document.getElementById("input").value.trim();
     if (!rawInput) return;
 
+    // --- PHẦN THÊM MỚI ĐỂ XỬ LÝ NGỮ CẢNH ---
+    let text = rawInput.toLowerCase();
+
+    // 1. Xử lý cụm "năm + số" (Ví dụ: năm 2025)
+    // Quy tắc: Nếu thấy chữ "năm" đi trước một con số, đổi "năm" thành "thut"
+    text = text.replace(/năm\s+(\d+)/g, "thut $1");
+
+    // 2. Xử lý từ "không" ở cuối câu hỏi và câu phủ định
+    if (text.endsWith("?")) {
+        text = text.replace(/không\s*\?/g, "cet?");
+    } else {
+        // Nếu là câu nói bình thường kết thúc bằng "không", đổi thành "oh"
+        text = text.replace(/không$/g, "oh");
+    }
+
     // --- ĐOẠN THÊM MỚI: KIỂM TRA VÀ CHUYỂN SỐ ---
     let inputForTranslation = rawInput;
     if (!isNaN(rawInput)) {
@@ -1563,6 +1578,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
