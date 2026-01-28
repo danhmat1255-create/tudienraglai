@@ -38,7 +38,7 @@
 <body>
 
 <div class="container">
-    <h2>Từ Điển RadLai - Việt bản 3.1</h2>
+    <h2>Từ Điển RadLai - Việt bản 3.2</h2>
     <div class="status-container">
         <div class="progress-bar"><div id="progress"></div></div>
         <div id="loadStatus" class="status-text">Đang khởi động hệ thống...</div>
@@ -766,7 +766,8 @@ niq|đây / nay
 niq|này
 o dahar o dahar|chầm chậm
 o đah|có thể
-oh / cet / soh / 0|không / 0
+oh / cet |không
+soh| 0 / không / số không
 luveh| lẻ / linh
 Oniq|hiện nay
 ot|nôn
@@ -1048,7 +1049,6 @@ sining|nghĩ /suy nghĩ/
 sining khiang|mơ ước
 sir|kín
 sod|giã
-soh|toàn / hết cả / tất cả
 sol mata|giác mạc
 sradqq|ná
 sraot|học
@@ -1358,7 +1358,7 @@ salapat|chín / 9
 ratuh|trăm
 tuman|triệu
 ayuh ranam|cảm ơn
-lumaq|năm / 5 / lăm
+lumaq|năm / 5 / lăm / số năm
 nam|sáu / 6
 manei ea| tắm
 kakud| chào
@@ -1520,9 +1520,9 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
     // 1.2. Tìm và dịch các con số trong chuỗi sang tiếng Việt, sau đó ép kiểu Raglai
     text = text.replace(/\d+/g, function(match) {
         let soTV = docSoTiengViet(parseInt(match));
-        // Ép chữ "năm" trong số thành "lumaq", "không" thành "soh" để không bị dịch nhầm
-        soTV = soTV.replace(/\bnăm\b/g, "lumaq");
-        soTV = soTV.replace(/\bkhông\b/g, "soh");
+        // Ép chữ "năm" trong số thành "số năm", "không" thành "số không" để không bị dịch nhầm
+        soTV = soTV.replace(/\bnăm\b/g, "số năm");
+        soTV = soTV.replace(/\bkhông\b/g, "số không");
         return soTV;
     });
 
@@ -1583,6 +1583,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
