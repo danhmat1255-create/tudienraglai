@@ -1507,34 +1507,37 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
     let rawInput = document.getElementById("input").value.trim();
     if (!rawInput) return;
 
-    // --- PHẦN THÊM MỚI ĐỂ XỬ LÝ NGỮ CẢNH ---
-    let text = rawInput.toLowerCase();
+    // BƯỚC 1: Chuyển số thành chữ tiếng Việt trước (nếu nhập số thuần túy)
+    let processedInput = rawInput;
+    if (!isNaN(rawInput)) {
+        processedInput = docSoTiengViet(parseInt(rawInput));
+    }
 
-    // 1. Xử lý cụm "năm + số" (Ví dụ: năm 2025)
-    // Quy tắc: Nếu thấy chữ "năm" đi trước một con số, đổi "năm" thành "thut"
+    // BƯỚC 2: Xử lý ngữ cảnh (Đồng nghĩa)
+    let text = processedInput.toLowerCase();
+
+    // Xử lý cụm "năm + số" (Ví dụ: năm 2025 -> thut 2025)
     text = text.replace(/năm\s+(\d+)/g, "thut $1");
+    
+    // Xử lý từ "năm" khi là mốc thời gian khác
+    text = text.replace(/năm\s+(ngoái|nay|sinh|trước)/g, "thut $1");
 
-    // 2. Xử lý từ "không" ở cuối câu hỏi và câu phủ định
+    // Xử lý từ "không"
     if (text.endsWith("?")) {
         text = text.replace(/không\s*\?/g, "cet?");
     } else {
-        // Nếu là câu nói bình thường kết thúc bằng "không", đổi thành "oh"
+        // Chỉ thay thế "không" ở cuối câu thành "oh"
         text = text.replace(/không$/g, "oh");
+        text = text.replace(/không\./g, "oh.");
     }
 
-    // --- ĐOẠN THÊM MỚI: KIỂM TRA VÀ CHUYỂN SỐ ---
-    let inputForTranslation = rawInput;
-    if (!isNaN(rawInput)) {
-        inputForTranslation = docSoTiengViet(parseInt(rawInput));
-    }
-    // --------------------------------------------
-
-    const lowInput = inputForTranslation.toLowerCase();
+    // BƯỚC 3: Bắt đầu dịch từ biến 'text' đã xử lý ngữ cảnh
+    const lowInput = text; 
     let i = 0, tokens = [];
 
     while (i < lowInput.length) {
         if (/\s|[.,!?;:]/.test(lowInput[i])) {
-            tokens.push({ val: inputForTranslation[i], isRaw: true }); // Dùng inputForTranslation thay vì input gốc
+            tokens.push({ val: text[i], isRaw: true });
             i++; continue;
         }
 
@@ -1559,11 +1562,12 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
         if (!found) {
             let j = i;
             while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
-            tokens.push({ val: inputForTranslation.substring(i, j), isRaw: true }); // Dùng inputForTranslation
+            tokens.push({ val: text.substring(i, j), isRaw: true });
             i = j;
         }
     }
 
+    // Hiển thị kết quả
     const res = tokens.map(tk => {
         if (tk.isTranslated) {
             if (tk.others) {
@@ -1581,6 +1585,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
