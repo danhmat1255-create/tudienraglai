@@ -1510,9 +1510,14 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 
     let text = rawInput.toLowerCase();
 
-    // BƯỚC 1: Xử lý ngữ cảnh "năm" và "không" trước khi dịch số
-    // Đổi "năm" đứng trước số thành "thut"
-    text = text.replace(/năm\s+(\d+)/g, "thut $1");
+    // BƯỚC 1: Xử lý số trước để "2025" thành "hai nghìn không trăm hai mươi lăm"
+    text = text.replace(/\d+/g, function(match) {
+        return docSoTiengViet(parseInt(match));
+    });
+
+    // BƯỚC 2: Xử lý ngữ cảnh (Dùng từ Raglai trực tiếp và viết hoa để đánh dấu)
+    // Thay vì đổi thành "thut" (tiếng Việt), ta đổi thẳng thành kết quả Raglai
+    text = text.replace(/năm\s+/g, "thut ");
     
     // Xử lý "không" cuối câu
     if (text.endsWith("?")) {
@@ -1574,6 +1579,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
