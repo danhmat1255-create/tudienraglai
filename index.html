@@ -1503,77 +1503,75 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
         return (!prev || !VALID_CHARS.test(prev)) && (!next || !VALID_CHARS.test(next));
     }
 
-    function xuLyDich() {
+   function xuLyDich() {
     let rawInput = document.getElementById("input").value.trim();
     if (!rawInput) return;
 
-    // BƯỚC 1: Chuyển số thành chữ tiếng Việt trước (nếu nhập số thuần túy)
-    let processedInput = rawInput;
+    // Bước 1: Nếu người dùng nhập thuần số (ví dụ: 2025), đổi nó sang chữ Tiếng Việt
+    let textToTranslate = rawInput;
     if (!isNaN(rawInput)) {
-        processedInput = docSoTiengViet(parseInt(rawInput));
+        textToTranslate = docSoTiengViet(parseInt(rawInput));
     }
 
-    // BƯỚC 2: Xử lý ngữ cảnh (Đồng nghĩa)
-    let text = processedInput.toLowerCase();
+    // Bước 2: Xử lý ngữ cảnh đồng nghĩa
+    let processedText = textToTranslate.toLowerCase();
 
-    // Xử lý cụm "năm + số" (Ví dụ: năm 2025 -> thut 2025)
-    text = text.replace(/năm\s+(\d+)/g, "thut $1");
+    // Sửa lỗi "năm 2025": Đổi "năm" đứng trước số thành "thut"
+    processedText = processedText.replace(/năm\s+(\d+)/g, "thut $1");
     
-    // Xử lý từ "năm" khi là mốc thời gian khác
-    text = text.replace(/năm\s+(ngoái|nay|sinh|trước)/g, "thut $1");
-
     // Xử lý từ "không"
-    if (text.endsWith("?")) {
-        text = text.replace(/không\s*\?/g, "cet?");
+    if (processedText.endsWith("?")) {
+        processedText = processedText.replace(/không\s*\?/g, "cet?");
     } else {
-        // Chỉ thay thế "không" ở cuối câu thành "oh"
-        text = text.replace(/không$/g, "oh");
-        text = text.replace(/không\./g, "oh.");
+        processedText = processedText.replace(/không$/g, "oh");
+        processedText = processedText.replace(/không\./g, "oh.");
     }
 
-    // BƯỚC 3: Bắt đầu dịch từ biến 'text' đã xử lý ngữ cảnh
-    const lowInput = text; 
-    let i = 0, tokens = [];
+    // Bước 3: Dịch thuật
+    let i = 0;
+    let tokens = [];
 
-    while (i < lowInput.length) {
-        if (/\s|[.,!?;:]/.test(lowInput[i])) {
-            tokens.push({ val: text[i], isRaw: true });
-            i++; continue;
+    while (i < processedText.length) {
+        // Giữ nguyên các ký tự đặc biệt và khoảng trắng
+        if (/\s|[.,!?;:]/.test(processedText[i])) {
+            tokens.push({ val: processedText[i], isRaw: true });
+            i++; 
+            continue;
         }
 
         let found = false;
-        const char = lowInput[i];
+        const char = processedText[i];
         const list = indexedKeys[char] || [];
 
+        // Tìm từ dài nhất trong từ điển khớp với từ hiện tại
         for (const key of list) {
-            if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
+            if (processedText.startsWith(key, i) && isWordBoundary(processedText, i, key.length)) {
                 let data = dict.get(key);
-                let transVal = data.trans;
-
-                const meanings = transVal.split('/').map(m => m.trim());
-                const first = meanings[0];
-                const others = meanings.slice(1).join(', ');
-
-                tokens.push({ first, others, isTranslated: true });
-                i += key.length; found = true; break;
+                let meanings = data.trans.split('/').map(m => m.trim());
+                tokens.push({ first: meanings[0], others: meanings.slice(1).join(', '), isTranslated: true });
+                i += key.length; 
+                found = true; 
+                break;
             }
         }
 
+        // Nếu không có trong từ điển, giữ nguyên từ gốc
         if (!found) {
             let j = i;
-            while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
-            tokens.push({ val: text.substring(i, j), isRaw: true });
+            while (j < processedText.length && !/\s|[.,!?;:]/.test(processedText[j])) j++;
+            tokens.push({ val: processedText.substring(i, j), isRaw: true });
             i = j;
         }
     }
 
-    // Hiển thị kết quả
+    // Bước 4: Hiển thị (Có xử lý khoảng trắng giữa các từ)
     const res = tokens.map(tk => {
         if (tk.isTranslated) {
+            let html = `<span class="highlight">${tk.first}</span>`;
             if (tk.others) {
-                return `<span class="highlight has-multiple" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
+                html = `<span class="highlight has-multiple" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
             }
-            return `<span class="highlight">${tk.first}</span>`;
+            return html;
         }
         return tk.val;
     }).join("");
@@ -1585,6 +1583,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
