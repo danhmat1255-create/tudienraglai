@@ -38,7 +38,7 @@
 <body>
 
 <div class="container">
-    <h2>Từ Điển RadLai - Việt bản 3.0</h2>
+    <h2>Từ Điển RadLai - Việt bản 3.1</h2>
     <div class="status-container">
         <div class="progress-bar"><div id="progress"></div></div>
         <div id="loadStatus" class="status-text">Đang khởi động hệ thống...</div>
@@ -1509,30 +1509,35 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 
     let text = rawInput.toLowerCase();
 
-    // BƯỚC 1: Xử lý số trước để "2025" thành "hai nghìn không trăm hai mươi lăm"
+    // =========================================================
+    // BƯỚC 1: XỬ LÝ NGỮ CẢNH ĐẶC BIỆT (Ghi chú: Thêm từ mới tại đây)
+    // =========================================================
+    
+    // 1.1. Xử lý "năm" là mốc thời gian (năm + số, hoặc năm ngoái/nay...)
+    text = text.replace(/năm\s+(\d+)/g, "thut $1");
+    text = text.replace(/năm\s+(ngoái|nay|sinh|trước)/g, "thut $1");
+
+    // 1.2. Tìm và dịch các con số trong chuỗi sang tiếng Việt, sau đó ép kiểu Raglai
     text = text.replace(/\d+/g, function(match) {
-        return docSoTiengViet(parseInt(match));
+        let soTV = docSoTiengViet(parseInt(match));
+        // Ép chữ "năm" trong số thành "lumaq", "không" thành "soh" để không bị dịch nhầm
+        soTV = soTV.replace(/\bnăm\b/g, "lumaq");
+        soTV = soTV.replace(/\bkhông\b/g, "soh");
+        return soTV;
     });
 
-    // BƯỚC 2: Xử lý ngữ cảnh (Dùng từ Raglai trực tiếp và viết hoa để đánh dấu)
-    // Thay vì đổi thành "thut" (tiếng Việt), ta đổi thẳng thành kết quả Raglai
-    text = text.replace(/năm\s+/g, "thut ");
-    
-    // Xử lý "không" cuối câu
+    // 1.3. Xử lý từ "không" ở cuối câu
     if (text.endsWith("?")) {
         text = text.replace(/không\s*\?/g, "cet?");
     } else {
+        // "không" ở cuối câu trần thuật là phủ định "oh"
         text = text.replace(/không$/g, "oh");
         text = text.replace(/không\./g, "oh.");
     }
 
-    // BƯỚC 2: QUAN TRỌNG - Tìm tất cả các con số trong câu và dịch chúng sang chữ Tiếng Việt
-    // Điều này giúp "222" thành "hai trăm hai mươi hai" trước khi tra từ điển Raglai
-    text = text.replace(/\d+/g, function(match) {
-        return docSoTiengViet(parseInt(match));
-    });
-
-    // BƯỚC 3: Tiến hành dịch thuật từ chuỗi đã chuẩn hóa
+    // =========================================================
+    // BƯỚC 2: TIẾN HÀNH DỊCH TỪ ĐIỂN (Giữ nguyên logic tra cứu của bạn)
+    // =========================================================
     const lowInput = text; 
     let i = 0, tokens = [];
 
@@ -1563,7 +1568,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
         }
     }
 
-    // BƯỚC 4: Hiển thị kết quả
+    // BƯỚC 3: HIỂN THỊ KẾT QUẢ
     const res = tokens.map(tk => {
         if (tk.isTranslated) {
             return `<span class="highlight ${tk.others ? 'has-multiple' : ''}" ${tk.others ? `onclick="this.classList.toggle('expanded')"` : ''}>${tk.first}${tk.others ? `<span class="more-meanings"> (${tk.others})</span>` : ''}</span>`;
@@ -1578,6 +1583,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
