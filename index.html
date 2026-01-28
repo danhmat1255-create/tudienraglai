@@ -1507,71 +1507,61 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
     let rawInput = document.getElementById("input").value.trim();
     if (!rawInput) return;
 
-    // Bước 1: Nếu người dùng nhập thuần số (ví dụ: 2025), đổi nó sang chữ Tiếng Việt
-    let textToTranslate = rawInput;
-    if (!isNaN(rawInput)) {
-        textToTranslate = docSoTiengViet(parseInt(rawInput));
-    }
+    let text = rawInput.toLowerCase();
 
-    // Bước 2: Xử lý ngữ cảnh đồng nghĩa
-    let processedText = textToTranslate.toLowerCase();
-
-    // Sửa lỗi "năm 2025": Đổi "năm" đứng trước số thành "thut"
-    processedText = processedText.replace(/năm\s+(\d+)/g, "thut $1");
+    // BƯỚC 1: Xử lý ngữ cảnh "năm" và "không" trước khi dịch số
+    // Đổi "năm" đứng trước số thành "thut"
+    text = text.replace(/năm\s+(\d+)/g, "thut $1");
     
-    // Xử lý từ "không"
-    if (processedText.endsWith("?")) {
-        processedText = processedText.replace(/không\s*\?/g, "cet?");
+    // Xử lý "không" cuối câu
+    if (text.endsWith("?")) {
+        text = text.replace(/không\s*\?/g, "cet?");
     } else {
-        processedText = processedText.replace(/không$/g, "oh");
-        processedText = processedText.replace(/không\./g, "oh.");
+        text = text.replace(/không$/g, "oh");
+        text = text.replace(/không\./g, "oh.");
     }
 
-    // Bước 3: Dịch thuật
-    let i = 0;
-    let tokens = [];
+    // BƯỚC 2: QUAN TRỌNG - Tìm tất cả các con số trong câu và dịch chúng sang chữ Tiếng Việt
+    // Điều này giúp "222" thành "hai trăm hai mươi hai" trước khi tra từ điển Raglai
+    text = text.replace(/\d+/g, function(match) {
+        return docSoTiengViet(parseInt(match));
+    });
 
-    while (i < processedText.length) {
-        // Giữ nguyên các ký tự đặc biệt và khoảng trắng
-        if (/\s|[.,!?;:]/.test(processedText[i])) {
-            tokens.push({ val: processedText[i], isRaw: true });
-            i++; 
-            continue;
+    // BƯỚC 3: Tiến hành dịch thuật từ chuỗi đã chuẩn hóa
+    const lowInput = text; 
+    let i = 0, tokens = [];
+
+    while (i < lowInput.length) {
+        if (/\s|[.,!?;:]/.test(lowInput[i])) {
+            tokens.push({ val: text[i], isRaw: true });
+            i++; continue;
         }
 
         let found = false;
-        const char = processedText[i];
+        const char = lowInput[i];
         const list = indexedKeys[char] || [];
 
-        // Tìm từ dài nhất trong từ điển khớp với từ hiện tại
         for (const key of list) {
-            if (processedText.startsWith(key, i) && isWordBoundary(processedText, i, key.length)) {
+            if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
                 let data = dict.get(key);
                 let meanings = data.trans.split('/').map(m => m.trim());
                 tokens.push({ first: meanings[0], others: meanings.slice(1).join(', '), isTranslated: true });
-                i += key.length; 
-                found = true; 
-                break;
+                i += key.length; found = true; break;
             }
         }
 
-        // Nếu không có trong từ điển, giữ nguyên từ gốc
         if (!found) {
             let j = i;
-            while (j < processedText.length && !/\s|[.,!?;:]/.test(processedText[j])) j++;
-            tokens.push({ val: processedText.substring(i, j), isRaw: true });
+            while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
+            tokens.push({ val: text.substring(i, j), isRaw: true });
             i = j;
         }
     }
 
-    // Bước 4: Hiển thị (Có xử lý khoảng trắng giữa các từ)
+    // BƯỚC 4: Hiển thị kết quả
     const res = tokens.map(tk => {
         if (tk.isTranslated) {
-            let html = `<span class="highlight">${tk.first}</span>`;
-            if (tk.others) {
-                html = `<span class="highlight has-multiple" onclick="this.classList.toggle('expanded')">${tk.first}<span class="more-meanings"> (${tk.others})</span></span>`;
-            }
-            return html;
+            return `<span class="highlight ${tk.others ? 'has-multiple' : ''}" ${tk.others ? `onclick="this.classList.toggle('expanded')"` : ''}>${tk.first}${tk.others ? `<span class="more-meanings"> (${tk.others})</span>` : ''}</span>`;
         }
         return tk.val;
     }).join("");
@@ -1583,6 +1573,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
