@@ -1514,8 +1514,8 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
     // =========================================================
     
     // 1.1. Xử lý "năm" là mốc thời gian (năm + số, hoặc năm ngoái/nay...)
-    text = text.replace(/năm\s+(\d+)/g, "thut $1");
-    text = text.replace(/năm\s+(ngoái|nay|sinh|trước)/g, "thut $1");
+    text = text.replace(/năm\s+(\d+)/g, "tuổi $1");
+    text = text.replace(/năm\s+(ngoái|nay|sinh|trước)/g, "tuổi $1");
 
     // 1.2. Tìm và dịch các con số trong chuỗi sang tiếng Việt, sau đó ép kiểu Raglai
     text = text.replace(/\d+/g, function(match) {
@@ -1583,6 +1583,7 @@ ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm lu�
 </script>
 </body>
 </html>
+
 
 
 
