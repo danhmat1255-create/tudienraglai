@@ -246,6 +246,7 @@ dak|sợi
 dalaot|trong / bên trong
 dalud|buồn nôn
 danao|hồ / ao
+chơm| thôn
 danhar|trơn
 danơl|nguồn
 danơl hunan|tiềm năng
@@ -701,8 +702,8 @@ m-uqd|cục yết hầu
 m'guaqh pagi|sáng mai
 mada|giàu
 madih|sôi
-maiq / wơt|về
-wơt | về / tiếp theo / tiếp tục
+maiq / wơt / ga|về
+wơt | tiếp theo / tiếp tục
 malaot|đêm
 man|mận
 manhiq|hát / hò
@@ -1424,17 +1425,12 @@ paziơk kaya angui|phát triển kinh tế
                 const ragParts = ragStr.split('/').map(s => s.trim());
                 const vieParts = vieStr.split('/').map(s => s.trim());
 
-                ragParts.forEach(r => {
-                    if (r) { dict.set(r, { trans: vieStr, type: 'r' }); addKeyToIndex(r); }
-                });
-                vieParts.forEach(v => {
-                    if (v) { dict.set(v, { trans: ragStr, type: 'v' }); addKeyToIndex(v); }
-                });
+                ragParts.forEach(r => { if (r) { dict.set(r, { trans: vieStr, type: 'r' }); addKeyToIndex(r); } });
+                vieParts.forEach(v => { if (v) { dict.set(v, { trans: ragStr, type: 'v' }); addKeyToIndex(v); } });
             }
             const pct = Math.floor((i / total) * 100);
             document.getElementById('progress').style.width = pct + '%';
             document.getElementById('loadStatus').innerText = `Đang nạp dữ liệu: ${pct}%`;
-
             if (i < total) setTimeout(step, 0);
             else finalize();
         }
@@ -1456,53 +1452,29 @@ paziơk kaya angui|phát triển kinh tế
         document.getElementById('btnDich').innerText = "DỊCH NGAY";
     }
 
-    // --- HÀM LOGIC QUAN TRỌNG NHẤT ---
-    function xuLyDongAm(word, fullInput, index) {
+    // --- ĐÂY LÀ HÀM BẠN ĐANG THIẾU ---
+    function xuLyLogicDongAm(word, fullInput, index) {
         const low = fullInput.toLowerCase();
         if (word === "không") {
-            // Lấy phần văn bản ngay sau từ "không"
             const sau = low.substring(index + word.length).trim();
+            const truoc = low.substring(0, index).trim();
             
-            // LOGIC: Nếu "không" ở cuối câu HOẶC ngay sau nó là dấu hỏi/chấm/than
-            if (sau === "" || /^[\?\!\.]/.test(sau)) {
-                return "cet"; 
-            }
+            // 1. Nếu trước là "số", "mã" -> Số 0 (soh)
+            if (/\b(số|mã|tổng|điểm)\b/.test(truoc)) return "soh";
             
-            // LOGIC: Nếu trước đó có chữ "số" (VD: Số không)
-            if (/\b(số|mã|tổng)\b/.test(low.substring(0, index))) return "soh";
+            // 2. Nếu đứng cuối câu hoặc sau là dấu hỏi -> Câu hỏi (cet)
+            if (sau === "" || /^[\?\!\.]/.test(sau)) return "cet";
             
-            return "oh"; // Mặc định là phủ định
+            // 3. Còn lại là phủ định (oh)
+            return "oh";
         }
-        
         if (word === "năm") {
             const sau = low.substring(index + 3).trim();
             const truoc = low.substring(0, index).trim();
-            // Nếu sau là số hoặc từ chỉ thời gian
-            if (/^\d+/.test(sau) || /\b(nay|sau|trước|kìa|mốt|học)\b/.test(sau) || /\b(vào|đầu|cuối)\b/.test(truoc)) {
-                return "thut";
-            }
+            if (/^\d+/.test(sau) || /\b(nay|sau|trước|kìa|mốt|học)\b/.test(sau) || /\b(vào|đầu|cuối)\b/.test(truoc)) return "thut";
             return "lumaq";
         }
         return null;
-    }
-
-    function dichSo(n) {
-        const dv = ["soh", "sa", "dua", "tlơu", "pad", "lumaq", "nam", "tizuh", "dalapat", "salapat"];
-        if (n < 10) return dv[n];
-        if (n < 100) {
-            let chuc = Math.floor(n / 10), dvi = n % 10;
-            let s = (chuc === 1) ? "sa pluh" : dv[chuc] + " pluh";
-            return dvi === 0 ? s : s + " " + dv[dvi];
-        }
-        if (n < 1000) {
-            let tram = Math.floor(n / 100), du = n % 100;
-            return dv[tram] + " ratuh" + (du !== 0 ? " " + dichSo(du) : "");
-        }
-        if (n < 1000000) {
-            let nghin = Math.floor(n / 1000), du = n % 1000;
-            return dichSo(nghin) + " ruvơu" + (du !== 0 ? " " + dichSo(du) : "");
-        }
-        return n.toString();
     }
 
     function isWordBoundary(text, index, len) {
@@ -1511,27 +1483,17 @@ paziơk kaya angui|phát triển kinh tế
     }
 
     function xuLyDich() {
-        const input = document.getElementById("input").value.trim();
-        if (!input) return;
-
+        const input = document.getElementById("input").value;
+        if (!input.trim()) return;
         const lowInput = input.toLowerCase();
         let i = 0, tokens = [];
 
         while (i < lowInput.length) {
-            // 1. Xử lý dấu câu và khoảng trắng
             if (/\s|[.,!?;:]/.test(lowInput[i])) {
                 tokens.push({ val: input[i], isRaw: true });
                 i++; continue;
             }
 
-            // 2. Xử lý số tự nhiên (2015)
-            let numMatch = lowInput.substring(i).match(/^\d+/);
-            if (numMatch) {
-                tokens.push({ val: dichSo(parseInt(numMatch[0])), isTranslated: true });
-                i += numMatch[0].length; continue;
-            }
-
-            // 3. Tra từ điển
             let found = false;
             const char = lowInput[i];
             const list = indexedKeys[char] || [];
@@ -1541,43 +1503,37 @@ paziơk kaya angui|phát triển kinh tế
                     let data = dict.get(key);
                     let finalTrans = data.trans;
 
-                    // Áp dụng logic ngữ cảnh cho Tiếng Việt
+                    // GỌI HÀM LOGIC Ở ĐÂY
                     if (data.type === 'v') {
-                        const logic = xuLyDongAm(key, lowInput, i);
+                        const logic = xuLyLogicDongAm(key, lowInput, i);
                         if (logic) finalTrans = logic;
                     }
 
                     let meanings = finalTrans.split('/').map(m => m.trim());
-                    tokens.push({ 
-                        first: meanings[0], 
-                        others: meanings.slice(1).join(', '), 
-                        isTranslated: true 
-                    });
+                    tokens.push({ first: meanings[0], others: meanings.slice(1).join(', '), isTranslated: true });
                     i += key.length; found = true; break;
                 }
             }
-
             if (!found) {
                 let j = i;
-                while (j < lowInput.length && !/\s|[.,!?;:\d]/.test(lowInput[j])) j++;
+                while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j])) j++;
                 tokens.push({ val: input.substring(i, j), isRaw: true });
                 i = j;
             }
         }
 
-        const res = tokens.map(tk => {
+        document.getElementById("output").innerHTML = tokens.map(tk => {
             if (tk.isTranslated) {
                 return `<span class="highlight ${tk.others ? 'has-multiple' : ''}" ${tk.others ? `onclick="this.classList.toggle('expanded')"` : ''}>${tk.first}${tk.others ? `<span class="more-meanings"> (${tk.others})</span>` : ''}</span>`;
             }
             return tk.val;
         }).join("");
-        document.getElementById("output").innerHTML = res;
     }
-
     window.onload = khoiTao;
 </script>
 </body>
 </html>
+
 
 
 
