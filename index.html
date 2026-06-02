@@ -3,68 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raglai Translate v2.8</title>
+    <title>Raglai Translate v3.2</title>
     <style>
-        :root { --primary: #1a73e8; --bg: #f1f3f4; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
-        .container { background: white; width: 100%; max-width: 500px; margin: auto; padding: 15px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); box-sizing: border-box; }
-        h2 { color: var(--primary); text-align: center; margin-top: 0; font-size: 20px; }
-        .status-container { margin-bottom: 10px; }
-        .progress-bar { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
+        :root { 
+            --primary: #1a73e8; 
+            /* Thay đổi đường dẫn URL ảnh của bạn ở đây */
+            --bg-image: url('https://raw.githubusercontent.com/danhmat1255-create/tudienraglai/refs/heads/main/12.jpg'); 
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, system-ui, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+           display: flex;
+			align-items: flex-end;   /* Đẩy toàn bộ nội dung bên trong xuống sát đáy */
+			justify-content: center; /* Giữ khung luôn ở chính giữa theo chiều ngang */
+		}
+
+        /* NỀN HÌNH ẢNH TOÀN MÀN HÌNH */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center center; /* Căn giữa ảnh nền trên mọi thiết bị */
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        /* KHUNG TRA CỨU: NẰM LƠ LỬNG CHÍNH GIỮA Ở NỬA DƯỚI */
+        .container { 
+            background: rgba(255, 255, 255, 0.88); /* Tăng độ đậm một chút để dễ đọc chữ */
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            width: 92%; 
+            max-width: 460px; /* Khống chế chiều rộng tối đa vừa vặn */
+            padding: 22px; 
+            margin-bottom: 15px; /* Khoảng cách an toàn với đáy màn hình */
+            border-radius: 24px; /* Bo tròn góc hiện đại, mềm mại */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            animation: fadeInBlur 0.5s ease-out;
+        }
+
+        @keyframes fadeInBlur {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { 
+            color: #111; 
+            text-align: center; 
+            margin-top: 5px; 
+            margin-bottom: 12px; 
+            font-size: 19px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+
+        .status-container { margin-bottom: 15px; }
+        .progress-bar { width: 100%; height: 4px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; }
         #progress { width: 0%; height: 100%; background: #34a853; transition: width 0.1s; }
-        .status-text { text-align: center; color: #5f6368; font-size: 11px; margin-top: 5px; font-weight: bold; }
-        textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid #dadce0; border-radius: 8px; font-size: 16px; box-sizing: border-box; outline: none; resize: none; }
-        .btn-dich { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        .btn-dich:disabled { background: #ccc; cursor: not-allowed; }
-        .result-box { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid var(--primary); min-height: 50px; }
+        .status-text { text-align: center; color: #5f6368; font-size: 11px; margin-top: 5px; font-weight: bold; letter-spacing: 0.5px; }
         
-        /* BỐ CỤC CHỮ CHẠY NGANG TỰ NHIÊN */
-        #output { font-size: 18px; line-height: 1.8; color: #202124; word-wrap: break-word; }
+        textarea { 
+            width: 100%; 
+            height: 95px; 
+            padding: 12px 15px; 
+            border: 1px solid rgba(0,0,0,0.12); 
+            border-radius: 14px; 
+            font-size: 16px; 
+            outline: none; 
+            resize: none; 
+            background: rgba(255,255,255,0.75);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(26,115,232,0.15); }
         
-        /* ĐỐI VỚI TỪ CÓ 1 NGHĨA HOẶC KÝ TỰ THƯỜNG: ĐỂ CHẠY NGANG */
+        .btn-dich { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 14px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin-top: 12px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 12px rgba(26,115,232,0.25);
+            transition: all 0.2s; 
+        }
+        .btn-dich:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+        .btn-dich:not(:disabled):active { transform: scale(0.98); background: #1557b0; }
+        
+        .result-box { 
+            margin-top: 12px; 
+            padding: 14px 15px; 
+            background: rgba(255, 255, 255, 0.65); 
+            border-radius: 14px; 
+            border-left: 4px solid var(--primary); 
+            min-height: 50px; 
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        
+        #output { font-size: 17px; line-height: 1.6; color: #202124; word-wrap: break-word; }
         .normal-word { display: inline; }
         
-        /* ĐỐI VỚI TỪ NHIỀU NGHĨA: TẠO KHỐI TÁCH DÒNG RIÊNG VÀ ĐÓNG KHUNG CHÚ THÍCH */
         .multiple-meanings-block {
-            display: block; /* Tách riêng cụm từ này thành khối riêng để không dính chữ dòng trên dòng dưới */
-            margin: 8px 0;
+            display: block; 
+            margin: 6px 0;
             padding: 6px 10px;
-            background: #f1f3f4;
-            border-radius: 6px;
+            background: rgba(232, 240, 254, 0.8);
+            border-radius: 8px;
             border-left: 3px solid #34a853;
         }
-        .meaning-row {
-            display: block; /* Xuống dòng cho từng nghĩa bên trong */
-            font-size: 17px;
-            margin-bottom: 4px;
-        }
+        .meaning-row { display: block; font-size: 16px; margin-bottom: 4px; color: #202124; }
         .meaning-row:last-child { margin-bottom: 0; }
         
-        /* NHÃN CHÚ THÍCH TỪ GỐC */
         .word-note {
-            font-size: 13px;
+            font-size: 12px;
             color: #1a73e8;
             font-weight: bold;
-            background: #e8f0fe;
-            padding: 1px 6px;
+            background: #fff;
+            padding: 1px 5px;
             border-radius: 4px;
             margin-right: 6px;
             display: inline-block;
+        }
+
+        /* ĐÃ SỬA: ĐỐI VỚI GIAO DIỆN MÁY TÍNH / MÀN HÌNH NGANG */
+        @media (min-width: 769px) {
+            body {
+                align-items: flex-end; /* Vẫn giữ ở nửa dưới */
+                justify-content: center; /* CHÍNH GIỮA màn hình, không lệch phải */
+            }
+            .container {
+                width: 450px;
+                margin-bottom: 40px; /* Nằm gọn gàng ở cạnh dưới trung tâm */
+                background: rgba(255, 255, 255, 0.92); /* Tăng độ tương phản rõ nét trên PC */
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Từ Điển RadLai - Việt bản 3.2</h2>
+    <h2>Từ Điển RadLai - Việt 3.2</h2>
     <div class="status-container">
         <div class="progress-bar"><div id="progress"></div></div>
-        <div id="loadStatus" class="status-text">Đang khởi động hệ thống...</div>
+        <div id="loadStatus" class="status-text">Đang khởi động...</div>
     </div>
     
-    <textarea id="input" placeholder="Nhập Việt hoặc Raglai..."></textarea>
+    <textarea id="input" placeholder="Nhập từ cần dịch..."></textarea>
     <button class="btn-dich" id="btnDich" disabled onclick="xuLyDich()">ĐANG NẠP DỮ LIỆU...</button>
-    <div class="result-box"><div id="output">Kết quả sẽ hiển thị tại đây...</div></div>
+    <div class="result-box"><div id="output">Kết quả hiển thị tại đây...</div></div>
 </div>
 
 <script id="raw_data" type="text/plain">
@@ -1472,7 +1572,6 @@ takatuat| bỗng nhiên / bỗng dưng
 manham| sản phẩm đặc thù
 kaya manham plah|  Nghề tiểu thủ công nghiệp
 voh ngaqt apuh kasơr| ngành công nghiệp
-
 </script>
 
 <script>
@@ -1560,7 +1659,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
 
             const pct = Math.floor((i / total) * 100);
             progress.style.width = pct + '%';
-            status.innerText = `Đang nạp dữ liệu: ${pct}% (${i}/${total})`;
+            status.innerText = `Đang tải: ${pct}%`;
 
             if (i < total) {
                 setTimeout(step, 0);
@@ -1581,7 +1680,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
         for (const char in indexedKeys) {
             indexedKeys[char] = Array.from(indexedKeys[char]).sort((a, b) => b.length - a.length);
         }
-        document.getElementById('loadStatus').innerText = "✅ ĐÃ SẴN SÀNG!";
+        document.getElementById('loadStatus').innerText = "✅ SẴN SÀNG TRA CỨU";
         const btn = document.getElementById('btnDich');
         btn.disabled = false;
         btn.innerText = "DỊCH NGAY";
@@ -1641,11 +1740,9 @@ voh ngaqt apuh kasơr| ngành công nghiệp
                     }
 
                     let htmlResult = "";
-                    // NẾU TỪ CHỈ CÓ 1 NGHĨA -> Giữ nguyên trạng thái hiển thị chạy ngang inline
                     if (meanings.length <= 1) {
                         htmlResult = `<span class="normal-word">${meanings[0]} </span>`;
                     } else {
-                        // NẾU TỪ CÓ NHIỀU NGHĨA -> Tạo khối riêng biệt (block) và chèn nhãn chú thích từ gốc tiếng Việt/Raglai
                         htmlResult = `<div class="multiple-meanings-block">`;
                         meanings.forEach(m => {
                             htmlResult += `<span class="meaning-row"><span class="word-note">${key}</span>→ ${m}</span>`;
