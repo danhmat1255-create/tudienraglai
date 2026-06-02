@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raglai Translate v2.8 </title>
+    <title>Raglai Translate v2.8</title>
     <style>
         :root { --primary: #1a73e8; --bg: #f1f3f4; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
@@ -17,22 +17,40 @@
         .btn-dich { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; }
         .btn-dich:disabled { background: #ccc; cursor: not-allowed; }
         .result-box { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid var(--primary); min-height: 50px; }
+        
+        /* BỐ CỤC CHỮ CHẠY NGANG TỰ NHIÊN */
         #output { font-size: 18px; line-height: 1.8; color: #202124; word-wrap: break-word; }
         
-        /* CSS CHO TỪ CÓ NHIỀU NGHĨA */
-        .highlight.has-multiple { 
-    color: #d93025; /* Màu đỏ */
-    border-bottom-color: #d93025; 
-}
-
-.more-meanings { 
-    display: none; 
-    color: #5f6368; 
-    font-weight: normal; 
-    font-size: 14px; 
-    font-style: italic; 
-}
-.expanded .more-meanings { display: inline; }
+        /* ĐỐI VỚI TỪ CÓ 1 NGHĨA HOẶC KÝ TỰ THƯỜNG: ĐỂ CHẠY NGANG */
+        .normal-word { display: inline; }
+        
+        /* ĐỐI VỚI TỪ NHIỀU NGHĨA: TẠO KHỐI TÁCH DÒNG RIÊNG VÀ ĐÓNG KHUNG CHÚ THÍCH */
+        .multiple-meanings-block {
+            display: block; /* Tách riêng cụm từ này thành khối riêng để không dính chữ dòng trên dòng dưới */
+            margin: 8px 0;
+            padding: 6px 10px;
+            background: #f1f3f4;
+            border-radius: 6px;
+            border-left: 3px solid #34a853;
+        }
+        .meaning-row {
+            display: block; /* Xuống dòng cho từng nghĩa bên trong */
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+        .meaning-row:last-child { margin-bottom: 0; }
+        
+        /* NHÃN CHÚ THÍCH TỪ GỐC */
+        .word-note {
+            font-size: 13px;
+            color: #1a73e8;
+            font-weight: bold;
+            background: #e8f0fe;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +62,7 @@
         <div id="loadStatus" class="status-text">Đang khởi động hệ thống...</div>
     </div>
     
-    <textarea id="input" placeholder="Nhập  Việt hoặc  Raglai..."></textarea>
+    <textarea id="input" placeholder="Nhập Việt hoặc Raglai..."></textarea>
     <button class="btn-dich" id="btnDich" disabled onclick="xuLyDich()">ĐANG NẠP DỮ LIỆU...</button>
     <div class="result-box"><div id="output">Kết quả sẽ hiển thị tại đây...</div></div>
 </div>
@@ -140,13 +158,12 @@ awei|mẹ
 awei prok|bác gái
 ayud|thổi
 ayuh ranam|cảm ơn
-bak|lần / lượt
 beit|bẫy / cái bẫy
 ben|nhỏ / bé
-bid / god| bị
 bet zale / zale|cái cuốc
 bhu|sạch sẽ
 bhu / god|sạch
+god| gặp phải / va phải / dính phải
 bla|bãi / quảng trường
 bla cuah|bãi cát
 blad mata|mở mắt
@@ -288,7 +305,7 @@ di rud|bổn phận
 did tagud|tăng trưởng
 dih|đó / kia
 dih dih| kia kìa
-ko| mà
+ka| mà
 kađa| ngại
 malơu| mắc cỡ
 padih| đàng kia
@@ -313,7 +330,7 @@ dol|thắng
 dơn|điếc
 dout|đắp
 dơut|đắp
-drah|nhanh /  mau
+drak|nhanh /  mau
 vahrơu|mới
 drah di gơt|nhanh hơn
 draqd|mát
@@ -334,7 +351,6 @@ dwi /katuk|kéo / kéo đi
 đah|nở /hoa/
 đaot|thẩm
 đeh/patuh|nổ
-đid tagud|tăng trưởng /  tăng
 đih|nằm
 đơd|nói
 đơd cuint| nói chuyện
@@ -396,7 +412,8 @@ gi|bếp
 gila|dại dột
 god jaqh|ảnh hưởng xấu
 got|nồi
-gơt|bạn
+gơt|bạn / nhau
+mhuq padei| được nghỉ
 si gơt|với nhau
 gơt ben|bạn nhỏ
 got jaot|nồi canh
@@ -480,7 +497,8 @@ thơd| thứ
 hurei patot|ngày đầu tiên
 hurei sa|chủ nhật
 hurei sadih|ngày hôm kia kìa
-huzad|mua
+huzad|mưa
+bak|cửa / cánh cửa
 iau|trái
 iduk|mũi
 ikad|con cá
@@ -546,11 +564,12 @@ kalei|đào
 kalid|giặc / kháng chiến / chiến tranh
 kalot mata|hốc mắt
 kan|khó / đắt
-kanal / mazua|nắm bắt / nhớ / thuộc / ghi nhớ
+kanal (dùng với nghĩa ghi nhớ bài học) / mazua (dùng với nghĩa nhớ nhung, nhớ vợ...)|nắm bắt / nhớ / thuộc / ghi nhớ
 kanaq|đang
 kanaq kohamum|đang hạnh phúc
 kohamum|hạnh phúc
 kaplung soh|mù mịt
+m'vai| ghét
 kapuih|con beo
 kapuih|beo
 karat|cái đe
@@ -584,7 +603,7 @@ ke no|cậu bé
 keh|sơn dương
 kei|ông
 du kei| các ông
-khak|cứng  / nhanh
+khak|cứng
 khak hatai|kiên quyết / quyết tâm
 khak hatai|quyết tâm
 khiang|muốn
@@ -656,10 +675,11 @@ lahong|đu đủ
 lakei|nam / trai / đàn ông
 lakơu|xin
 lamhong|màu mỡ
-lamo| bò
+lamo (nghĩa là con bò) / srod (nghĩa là bò, trườn, ví dụ con rắng bò)| bò
 drei lamo| con bò
 lamo inad|bò cái
 lanei|nơi
+sadua| đổi
 langar|cái cày
 langiqd|trời / bầu trời / thời tiết
 langiqd ruvud|thiên tai
@@ -675,7 +695,7 @@ lawah| diện tích
 lawah tanaqh|diện tích / vùng đất
 laya|gừng
 liah|liếm
-lih|mãi
+lih / meit|mãi
 lingiaq|tai
 lingiaq mhơqt|thính giác
 lisuk|cái cối / cối
@@ -739,7 +759,6 @@ mataqh|lưng
 maya|xinh đẹp
 maya / lageh|đẹp
 maya ganuqh|khôi ngô
-meit|mãi
 meriah | màu đỏ
 mguaqh / sadah|sáng / buổi sáng
 mhơqt|nghe
@@ -773,8 +792,8 @@ niq|đây / nay
 niq|này
 loa loa / o dahar o dahar|chầm chậm
 o đah|có thể
-oh / cet |không
-soh| 0 / không / số không
+oh (dùng với nghĩa phủ định) / cet (dùng cho câu hỏi) / soh (dùng với nghĩa số đếm) |không
+soh| 0 / số không
 luveh| lẻ / linh
 Oniq|hiện nay
 ot|nôn
@@ -970,6 +989,7 @@ ralo|thịt
 ralo aot|thịt nướng
 aot| nướng
 ralo situt|thịt luộc
+situt| luộc
 sana| xào
 ranuaqt|mưu / mẹo
 rao|rửa
@@ -983,7 +1003,6 @@ rija tangan|ngón tay
 riji rijekd|đông đúc / rất đông
 rinơk|táo
 risiơu|tối sầm / sầm lại /tối
-riya| khi / rậm
 rok|lưng
 ruah|chọn /bầu chọn / lựa chọn
 ruah maqt|chọn lấy
@@ -1087,8 +1106,10 @@ tadluh di avih|hơn hết / nhất
 tadq|sét
 tadut|dây 
 tagalo|con thằn lằn
-tagud|đứng / dậy / thức dậy
+tagud|đứng / dậy / thức dậy / lên
 tagud dơk|đứng dậy
+Pud tagud | nâng lên
+pud| nâng / ẵm / đỡ
 tahanreiq / takađa|giật mình
 loa|chậm / trễ
 takai|chân
@@ -1213,6 +1234,7 @@ tumya|múa
 tupa|sải tay / phía trước
 tupuk|bột
 tupuk zaman|bột ngọt
+zaman| ngọt
 tuveit|mòn
 tuvhad|hắt xì
 tuviat|ra
@@ -1291,7 +1313,7 @@ vrah|gạo
 vruaqt|việc / công việc
 vruh|vọt ra
 vu|cơm / thì
-vuh (bỏ vào)/ tla (bỏ ra, bỏ đi)|bỏ 
+vuh (dùng với nghĩa bỏ vào "bỏ đá vào ly")/ tla (dùng với nghĩa bỏ ra, bỏ đi, giải tán)|bỏ 
 tla nau| bỏ đi / bỏ chạy 
 vuit|nhổ
 vumao|nấm
@@ -1310,6 +1332,7 @@ war bơk|bữa ăn
 wat|mùa khô
 wet / zơ|liền / ngay
 wid|đục
+hual| mây
 wih tuba|ngoái nhìn
 wik|xung quanh
 wil|tròn
@@ -1356,7 +1379,7 @@ zhok cet|xúc đi
 zhul paziat|thúc giục
 zin pariat|kinh phí
 zin| tiền
-ziơk|được / thành
+ziơk (dùng với nghĩa được phép, được làm...)/ mhuq (dùng với nghĩa "được cho ăn", "được cho uống")|được / thành
 zo|cái rìu
 avih|hết / tất cả
 zrau|thuốc chữa bệnh
@@ -1449,51 +1472,53 @@ takatuat| bỗng nhiên / bỗng dưng
 manham| sản phẩm đặc thù
 kaya manham plah|  Nghề tiểu thủ công nghiệp
 voh ngaqt apuh kasơr| ngành công nghiệp
+
 </script>
 
 <script>
     function docSoTiengViet(n) {
-    const chu = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
-    if (n === 0) return chu[0];
+        const chu = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+        if (n === 0) return chu[0];
 
-    function doc3So(num, showTram) {
-        let tram = Math.floor(num / 100);
-        let chuc = Math.floor((num % 100) / 10);
-        let dv = num % 10;
-        let st = "";
+        function doc3So(num, showTram) {
+            let tram = Math.floor(num / 100);
+            let chuc = Math.floor((num % 100) / 10);
+            let dv = num % 10;
+            let st = "";
 
-        if (tram > 0 || showTram) {
-            st = chu[tram] + " trăm";
-            if (chuc === 0 && dv !== 0) st += " lẻ";
+            if (tram > 0 || showTram) {
+                st = chu[tram] + " trăm";
+                if (chuc === 0 && dv !== 0) st += " lẻ";
+            }
+            if (chuc === 1) st += " mười";
+            else if (chuc > 1) st += " " + chu[chuc] + " mươi";
+
+            if (dv === 1 && chuc > 1) st += " mốt";
+            else if (dv === 5 && chuc > 0) st += " lăm";
+            else if (dv !== 0) st += " " + chu[dv];
+            
+            return st.trim();
         }
-        if (chuc === 1) st += " mười";
-        else if (chuc > 1) st += " " + chu[chuc] + " mươi";
 
-        if (dv === 1 && chuc > 1) st += " mốt";
-        else if (dv === 5 && chuc > 0) st += " lăm";
-        else if (dv !== 0) st += " " + chu[dv];
-        
-        return st.trim();
+        let ketQua = "";
+        let ty = Math.floor(n / 1000000000);
+        let trieu = Math.floor((n % 1000000000) / 1000000);
+        let nghin = Math.floor((n % 1000000) / 1000);
+        let donvi = n % 1000;
+
+        if (ty > 0) ketQua += doc3So(ty, false) + " tỷ ";
+        if (trieu > 0) ketQua += doc3So(trieu, ty > 0) + " triệu ";
+        if (nghin > 0) ketQua += doc3So(nghin, trieu > 0) + " nghìn ";
+        if (donvi > 0 || ketQua === "") ketQua += doc3So(donvi, nghin > 0 || trieu > 0);
+
+        return ketQua.trim();
     }
 
-    let ketQua = "";
-    let ty = Math.floor(n / 1000000000);
-    let trieu = Math.floor((n % 1000000000) / 1000000);
-    let nghin = Math.floor((n % 1000000) / 1000);
-    let donvi = n % 1000;
-
-    if (ty > 0) ketQua += doc3So(ty, false) + " tỷ ";
-    if (trieu > 0) ketQua += doc3So(trieu, ty > 0) + " triệu ";
-    if (nghin > 0) ketQua += doc3So(nghin, trieu > 0) + " nghìn ";
-    if (donvi > 0 || ketQua === "") ketQua += doc3So(donvi, nghin > 0 || trieu > 0);
-
-    return ketQua.trim();
-}
     const dict = new Map();
     const indexedKeys = {};
     const VALID_CHARS = /[a-zA-Zàáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/;
 
-    async function khoiTao() {
+    function khoiTao() {
         const raw = document.getElementById('raw_data').textContent;
         const lines = raw.split('\n').filter(l => l.includes('|'));
         const total = lines.length;
@@ -1504,8 +1529,9 @@ voh ngaqt apuh kasơr| ngành công nghiệp
         let i = 0;
         const batchSize = 100;
 
-        async function step() {
+        function step() {
             const limit = Math.min(i + batchSize, total);
+            
             for (; i < limit; i++) {
                 const line = lines[i].toLowerCase().trim();
                 const parts = line.split('|').map(s => s.trim());
@@ -1519,14 +1545,14 @@ voh ngaqt apuh kasơr| ngành công nghiệp
 
                 ragParts.forEach(r => {
                     if (r) {
-                        dict.set(r, { trans: vieStr, type: 'r' });
+                        dict.set(r, { original: r, trans: vieStr, type: 'r' });
                         addKeyToIndex(r);
                     }
                 });
 
                 vieParts.forEach(v => {
                     if (v) {
-                        dict.set(v, { trans: ragStr, type: 'v' });
+                        dict.set(v, { original: v, trans: ragStr, type: 'v' });
                         addKeyToIndex(v);
                     }
                 });
@@ -1566,165 +1592,90 @@ voh ngaqt apuh kasơr| ngành công nghiệp
         return (!prev || !VALID_CHARS.test(prev)) && (!next || !VALID_CHARS.test(next));
     }
 
-  function xuLyDich() {
-    let rawInput = document.getElementById("input").value.trim();
-    if (!rawInput) return;
+    function xuLyDich() {
+        let rawInput = document.getElementById("input").value.trim();
+        if (!rawInput) return;
 
-    let lowInput = rawInput.toLowerCase();
-    let i = 0, tokens = [];
+        let lowInput = rawInput.toLowerCase();
+        let i = 0, tokens = [];
 
-    while (i < lowInput.length) {
-        // 1. Xử lý khoảng trắng và dấu câu
-        if (/\s|[.,!?;:]/.test(rawInput[i])) {
-            tokens.push({ val: rawInput[i], isRaw: true });
-            i++; continue;
-        }
+        while (i < lowInput.length) {
+            if (/\s|[.,!?;:]/.test(rawInput[i])) {
+                tokens.push({ val: rawInput[i], isRaw: true });
+                i++; continue;
+            }
 
-        // 2. LOGIC ĐẶC BIỆT: Kiểm tra "năm" đứng trước số
-        // Lấy đoạn text từ vị trí hiện tại để kiểm tra
-        let textRest = lowInput.substring(i);
-        let matchNam = textRest.match(/^năm\s+(\d+)/);
-        
-        if (matchNam) {
-            // Nếu khớp "năm [số]", ta gán "thut" cho từ "năm"
-            tokens.push({ first: "thut", isTranslated: true });
-            i += matchNam[0].split(' ')[0].length; // Bỏ qua từ "năm"
-            continue;
-        }
+            let textRest = lowInput.substring(i);
+            let matchNam = textRest.match(/^năm\s+(\d+)/);
+            
+            if (matchNam) {
+                tokens.push({ htmlContent: '<span class="normal-word">thut </span>', dangerHtml: true });
+                i += matchNam[0].split(' ')[0].length;
+                continue;
+            }
 
-        // 3. XỬ LÝ SỐ (Giữ nguyên logic dịch số của bạn)
-        if (/\d/.test(lowInput[i])) {
-            let j = i;
-            while (j < lowInput.length && /\d/.test(lowInput[j])) j++;
-            let numStr = lowInput.substring(i, j);
-            let chuViet = docSoTiengViet(parseInt(numStr));
-            let words = chuViet.split(/\s+/);
-            let raglaiResult = words.map(word => dict.has(word) ? dict.get(word).trans.split('/')[0].trim() : word).join(" ");
-            tokens.push({ first: raglaiResult, isTranslated: true });
-            i = j; continue;
-        }
+            if (/\d/.test(lowInput[i])) {
+                let j = i;
+                while (j < lowInput.length && /\d/.test(lowInput[j])) j++;
+                let numStr = lowInput.substring(i, j);
+                let chuViet = docSoTiengViet(parseInt(numStr));
+                let words = chuViet.split(/\s+/);
+                let raglaiResult = words.map(word => dict.has(word) ? dict.get(word).trans.split('/')[0].trim() : word).join(" ");
+                tokens.push({ htmlContent: `<span class="normal-word">${raglaiResult}</span>`, dangerHtml: true });
+                i = j; continue;
+            }
 
-        // 4. XỬ LÝ TỪ VỰNG (Giữ nguyên logic của bạn)
-        let found = false;
-        const char = lowInput[i];
-        const list = indexedKeys[char] || [];
+            let found = false;
+            const char = lowInput[i];
+            const list = indexedKeys[char] || [];
 
-        for (const key of list) {
-            if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
-                let data = dict.get(key);
-                let meanings = data.trans.split('/').map(m => m.trim());
-                let finalMeaning = meanings[0];
+            for (const key of list) {
+                if (lowInput.startsWith(key, i) && isWordBoundary(lowInput, i, key.length)) {
+                    let data = dict.get(key);
+                    let meanings = data.trans.split('/').map(m => m.trim());
 
-                // Logic cho "không" (Giữ nguyên)
-                if (key === "không") {
-                    let sau = lowInput.substring(i + key.length).trim();
-                    finalMeaning = (sau.includes("?") || sau === "" || /^[.!]/.test(sau)) ? "cet" : "oh";
+                    if (key === "không") {
+                        let sau = lowInput.substring(i + key.length).trim();
+                        let finalMeaning = (sau.includes("?") || sau === "" || /^[.!]/.test(sau)) ? "cet" : "oh";
+                        meanings = [finalMeaning];
+                    }
+
+                    let htmlResult = "";
+                    // NẾU TỪ CHỈ CÓ 1 NGHĨA -> Giữ nguyên trạng thái hiển thị chạy ngang inline
+                    if (meanings.length <= 1) {
+                        htmlResult = `<span class="normal-word">${meanings[0]} </span>`;
+                    } else {
+                        // NẾU TỪ CÓ NHIỀU NGHĨA -> Tạo khối riêng biệt (block) và chèn nhãn chú thích từ gốc tiếng Việt/Raglai
+                        htmlResult = `<div class="multiple-meanings-block">`;
+                        meanings.forEach(m => {
+                            htmlResult += `<span class="meaning-row"><span class="word-note">${key}</span>→ ${m}</span>`;
+                        });
+                        htmlResult += `</div>`;
+                    }
+                    
+                    tokens.push({ htmlContent: htmlResult, dangerHtml: true });
+                    i += key.length; found = true; break;
                 }
+            }
 
-                tokens.push({ first: finalMeaning, others: meanings.slice(1).join(', '), isTranslated: true });
-                i += key.length; found = true; break;
+            if (!found) {
+                let j = i;
+                while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j]) && !/\d/.test(lowInput[j])) j++;
+                tokens.push({ val: rawInput.substring(i, j) + " ", isRaw: true });
+                i = j;
             }
         }
 
-        if (!found) {
-            let j = i;
-            while (j < lowInput.length && !/\s|[.,!?;:]/.test(lowInput[j]) && !/\d/.test(lowInput[j])) j++;
-            tokens.push({ val: rawInput.substring(i, j), isRaw: true });
-            i = j;
-        }
+        const res = tokens.map(tk => {
+            if (tk.dangerHtml) return tk.htmlContent;
+            return tk.val;
+        }).join("");
+
+        document.getElementById("output").innerHTML = res;
     }
-
-    // Hiển thị kết quả
-    const res = tokens.map(tk => {
-        if (tk.isTranslated) {
-            return `<span class="highlight ${tk.others ? 'has-multiple' : ''}" ${tk.others ? `onclick="this.classList.toggle('expanded')"` : ''}>${tk.first}${tk.others ? `<span class="more-meanings"> (${tk.others})</span>` : ''}</span>`;
-        }
-        return tk.val;
-    }).join("");
-
-    document.getElementById("output").innerHTML = res;
-}
     
     window.onload = khoiTao;
 </script>
     
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
