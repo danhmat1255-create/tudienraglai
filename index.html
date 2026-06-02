@@ -27,23 +27,20 @@
 
         /* NỀN HÌNH ẢNH TOÀN MÀN HÌNH */
         body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: var(--bg-image);
-    
-    /* ĐIỀU CHỈNH TẠI ĐÂY */
-   background-size: 160% auto;      /* Đổi từ 'cover' thành thông số này. 160% giúp ảnh thu nhỏ hơn so với mặc định trên màn hình dọc */
-    background-position: center 15%; /* Căn chỉnh tâm ảnh dịch lên trên một chút (15%) để lộ rõ mặt */
-    
-    background-repeat: no-repeat;
-}
-   
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--bg-image);
+            background-size: contain;
+            background-position: center top; /* Đẩy ảnh lên sát đỉnh màn hình để không bị khung tra cứu che mất */
+          	background-repeat: no-repeat;
+    		background-color: #000;          /* Thêm nền đen (hoặc màu tối) cho những khoảng trống còn dư phía dưới */
+   			z-index: -1;
+		}
+
         /* KHUNG TRA CỨU: NẰM LƠ LỬNG CHÍNH GIỮA Ở NỬA DƯỚI */
         .container { 
-            background: rgba(255, 255, 255, 0.95); /* Tăng độ đậm nền để chữ rõ ràng trên nền tối */
-    margin-bottom: 0px;
-}
+            background: rgba(255, 255, 255, 0.88); /* Tăng độ đậm một chút để dễ đọc chữ */
             backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
             width: 92%; 
