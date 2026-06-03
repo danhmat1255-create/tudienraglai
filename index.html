@@ -285,8 +285,8 @@ buah vet| đọc đi
 bud|tóc
 bueit|dễ / đơn giản / rẻ
 buh|thấy
-buh va haget ga vuơl oh| đem lại cho dân
-buh oh| thấy
+buh va haget ga vuơl oh|không đem lại cho dân
+buh oh|không thấy
 luei / ca|chờ / đợi
 cadamt|bền vững
 cađah sana tangei|nồi rang bắp
@@ -301,7 +301,6 @@ cađiak tangan inaq|ngón tay cái
 caga|can / can ngăn
 cagad|gang tay
 cagak|chà gạc
-tuviat | ban hành
 cakhat|ngăn / ngăn chặn / chặn
 caku|khiêng
 cakuai|con cheo / con mang / con hoẵng / con đỏ
@@ -629,7 +628,7 @@ jho jho|lẽo đẽo
 jơt|đúng / đúng là
 laq| là
 jơt gơt|giống nhau
-jơt oh| đúng /  phải
+jơt oh|không đúng / không phải
 jra|con cáo
 jra|cáo
 jra / maza|chồn
@@ -777,7 +776,7 @@ lahong|đu đủ
 lakei|nam / trai / đàn ông
 lakơu|xin
 lamhong|màu mỡ
-lamo (nghĩa là con bò) / srod (nghĩa là bò, trườn, ví dụ con rắn bò)| bò
+lamo (nghĩa là con bò) / srod (nghĩa là bò, trườn, ví dụ con rắng bò)| bò
 drei lamo| con bò
 lamo inad|bò cái
 lanei|nơi
@@ -785,7 +784,7 @@ sadua| đổi
 langar|cái cày
 langiqd|trời / bầu trời / thời tiết
 langiqd ruvud|thiên tai
-lanơqh| gian sống / nơi sống / nơi / vị trí
+lanơqh|không gian sống / nơi sống / nơi / vị trí
 lapa|đói
 lapa rabaqh|đói khổ
 laraker|khèn bầu
@@ -894,8 +893,8 @@ niq|đây / nay
 niq|này
 loa loa / o dahar o dahar|chầm chậm
 o đah|có thể
-oh /cet |
-soh| 0 / số 
+oh (dùng với nghĩa phủ định) / cet (dùng cho câu hỏi) / soh (dùng với nghĩa số đếm) |không
+soh| 0 / số không
 luveh| lẻ / linh
 Oniq|hiện nay
 ot|nôn
@@ -1513,7 +1512,7 @@ paniq| mền
 havuei | mì / khoai mì
 pu| ủy ban nhân dân
 ơ| ơi
-mhuq halei dod sa cet?| có ai ở nhà 
+mhuq halei dod sa cet?| có ai ở nhà không
 bơk tasat|ăn chín
 ea tasat|uống sôi
 e| nè
@@ -1523,7 +1522,7 @@ radeh|xe
 radeh honda|xe máy
 galud| đội
 galud salatut samid| đội mũ bảo hiểm
-galud salatut samid oh|  đội mũ bảo hiểm
+galud salatut samid oh| không đội mũ bảo hiểm
 nau zalad riya prong| tham gia giao thông
 ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm luật giao thông /  phải làm đúng luật giao thông
 đuait|chạy
@@ -1567,7 +1566,7 @@ tuk hatai| đạo đức
 voh pađid / kan rabaqh| nỗi đau
 voh siad /  siad maya| niềm vui
 ngaqt halit vuơl vila| phụng sự nhân dân
-buh va haget ga vuơl oh|  đem lại cho dân
+buh va haget ga vuơl oh| không đem lại cho dân
 buh va haget ga vuơl|  đem lại cho dân
 hawal| lo lắng
 takatuat| bỗng nhiên / bỗng dưng
@@ -1578,7 +1577,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
 
 <script>
     function docSoTiengViet(n) {
-        const chu = ["", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+        const chu = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
         if (n === 0) return chu[0];
 
         function doc3So(num, showTram) {
@@ -1735,7 +1734,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
                     let data = dict.get(key);
                     let meanings = data.trans.split('/').map(m => m.trim());
 
-                    if (key === " số ") {
+                    if (key === "không") {
                         let sau = lowInput.substring(i + key.length).trim();
                         let finalMeaning = (sau.includes("?") || sau === "" || /^[.!]/.test(sau)) ? "cet" : "oh";
                         meanings = [finalMeaning];
