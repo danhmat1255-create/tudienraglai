@@ -301,6 +301,7 @@ cađiak tangan inaq|ngón tay cái
 caga|can / can ngăn
 cagad|gang tay
 cagak|chà gạc
+tuviat | ban hành
 cakhat|ngăn / ngăn chặn / chặn
 caku|khiêng
 cakuai|con cheo / con mang / con hoẵng / con đỏ
@@ -893,8 +894,8 @@ niq|đây / nay
 niq|này
 loa loa / o dahar o dahar|chầm chậm
 o đah|có thể
-oh /cet |không
-soh| 0 / số không
+oh /cet |
+soh| 0 / số 
 luveh| lẻ / linh
 Oniq|hiện nay
 ot|nôn
@@ -1512,7 +1513,7 @@ paniq| mền
 havuei | mì / khoai mì
 pu| ủy ban nhân dân
 ơ| ơi
-mhuq halei dod sa cet?| có ai ở nhà không
+mhuq halei dod sa cet?| có ai ở nhà 
 bơk tasat|ăn chín
 ea tasat|uống sôi
 e| nè
@@ -1522,7 +1523,7 @@ radeh|xe
 radeh honda|xe máy
 galud| đội
 galud salatut samid| đội mũ bảo hiểm
-galud salatut samid oh| không đội mũ bảo hiểm
+galud salatut samid oh|  đội mũ bảo hiểm
 nau zalad riya prong| tham gia giao thông
 ngaqt pajơt lageh luật / ngaqt pajơt luật zalad| chấp hành nghiêm luật giao thông /  phải làm đúng luật giao thông
 đuait|chạy
@@ -1566,7 +1567,7 @@ tuk hatai| đạo đức
 voh pađid / kan rabaqh| nỗi đau
 voh siad /  siad maya| niềm vui
 ngaqt halit vuơl vila| phụng sự nhân dân
-buh va haget ga vuơl oh| không đem lại cho dân
+buh va haget ga vuơl oh|  đem lại cho dân
 buh va haget ga vuơl|  đem lại cho dân
 hawal| lo lắng
 takatuat| bỗng nhiên / bỗng dưng
@@ -1577,7 +1578,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
 
 <script>
     function docSoTiengViet(n) {
-        const chu = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+        const chu = ["", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
         if (n === 0) return chu[0];
 
         function doc3So(num, showTram) {
@@ -1734,7 +1735,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
                     let data = dict.get(key);
                     let meanings = data.trans.split('/').map(m => m.trim());
 
-                    if (key === " số không") {
+                    if (key === " số ") {
                         let sau = lowInput.substring(i + key.length).trim();
                         let finalMeaning = (sau.includes("?") || sau === "" || /^[.!]/.test(sau)) ? "cet" : "oh";
                         meanings = [finalMeaning];
