@@ -32,7 +32,7 @@
             top: 0; left: 0; right: 0; bottom: 0;
             background-image: var(--bg-image);
             background-size: contain;
-            background-position: center top; /* Đẩy ảnh lên sát đỉnh màn hình để không bị khung tra cứu che mất */
+            background-position: center top; /* Đẩy ảnh lên sát đỉnh màn hình để  bị khung tra cứu che mất */
           	background-repeat: no-repeat;
     		background-color: #000;          /* Thêm nền đen (hoặc màu tối) cho những khoảng trống còn dư phía dưới */
    			z-index: -1;
@@ -1734,7 +1734,7 @@ voh ngaqt apuh kasơr| ngành công nghiệp
                     let data = dict.get(key);
                     let meanings = data.trans.split('/').map(m => m.trim());
 
-                    if (key === "không") {
+                    if (key === " số không") {
                         let sau = lowInput.substring(i + key.length).trim();
                         let finalMeaning = (sau.includes("?") || sau === "" || /^[.!]/.test(sau)) ? "cet" : "oh";
                         meanings = [finalMeaning];
